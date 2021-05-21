@@ -17,10 +17,13 @@ class SignUp extends React.Component {
         countries: data.map( element =>({ label: element.name, value:element.name  }) ) }) )
     }
 
-    readForm =( input, value )=>{
-        this.setState({ ...this.state,form:{ ...this.state.form, [input]:value }})
-    }
+    readForm =( input, value )=>{ this.setState({ ...this.state,form:{ ...this.state.form, [input]:value }}) }
       
+    submitForm =()=>{
+        this.props.submitForm( "signup", this.state.form )
+        .then( data => data.success && this.props.navigation.navigate("Home") )
+    }
+
 
 render(){
     return <ScrollView style={ styles.mainContainer }>
@@ -59,7 +62,7 @@ render(){
              </View>
              <View style={ styles.placeHolders }>
                 <TouchableOpacity style={ styles.buttonContainer } >
-                    <Text onPress={ ()=> this.props.submitForm( "signup", this.state.form ) } style={ styles.send }>SignUp</Text>
+                    <Text onPress={ this.submitForm } style={ styles.send }>SignUp</Text>
                 </TouchableOpacity>
              </View>
     </ScrollView>

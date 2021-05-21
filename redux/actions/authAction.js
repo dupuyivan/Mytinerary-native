@@ -11,14 +11,16 @@ const authAction ={
     },
     submitForm:(endpoint,form)=>{
         return( dispatch)=>{
-            fetch("http://mytinerarydupuy.herokuapp.com/api/"+ endpoint, {
+            return fetch("http://mytinerarydupuy.herokuapp.com/api/"+ endpoint, {
                 method:"POST",
                 headers:{ 'Content-Type': 'application/json'},
                 body: JSON.stringify( form ) 
             } )
             .then( data => data.json() )
             .then( data =>{
-                if( data.success){ dispatch({ type:"LOGUSER", payload:data.result }) }
+                if( data.success){ dispatch({ type:"LOGUSER", payload:data.result }) 
+                    return { success:true }
+                }
                 else{
                     console.log( data )
                 }

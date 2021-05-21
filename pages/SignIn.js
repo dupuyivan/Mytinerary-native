@@ -6,14 +6,14 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-nativ
 
 class SignIn extends React.Component {
 
- state={
-    form:{ email:"", password:"" }
- }
+ state={ form:{ email:"", password:"" } }
 
- readForm = (field, value)=>{
-    this.setState({ ...this.state, form:{ ...this.state.form, [field]:value } })
- }
+ readForm = (field, value)=>{ this.setState({ ...this.state, form:{ ...this.state.form, [field]:value } }) }
 
+ submitForm=()=>{
+    this.props.submitForm("signin",this.state.form )
+    .then( data => data.success && this.props.navigation.navigate("Home") )
+ }
 
 render(){
     return <View style={ styles.mainContainer }>
@@ -29,7 +29,7 @@ render(){
     </View>
     <View style={ styles.placeHolders }>
        <TouchableOpacity style={ styles.buttonContainer } >
-           <Text onPress={ ()=> this.props.submitForm("signin",this.state.form ) } style={ styles.send }>SignIn</Text>
+           <Text onPress={ this.submitForm } style={ styles.send }>SignIn</Text>
        </TouchableOpacity>
     </View>
 </View>
