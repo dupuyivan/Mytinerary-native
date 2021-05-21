@@ -36,12 +36,18 @@ render(){
     </ScrollView>
 }
 }
+
+const mapStateToProps = state =>{
+    return{
+        userLogged: state.authReducer.userLogged
+    }
+}
+
 const mapDispatchStateToprops ={
     fetchItinerary:citiesAction.fetchItinerary
 }
 
-
-export default connect(null, mapDispatchStateToprops) (City)
+export default connect(mapStateToProps, mapDispatchStateToprops) (City)
 
 const styles = StyleSheet.create({
     mainContainer:{

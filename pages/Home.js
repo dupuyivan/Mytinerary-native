@@ -1,43 +1,46 @@
 import React from "react"
 import Carousel from "../components/Carousel"
 import { StyleSheet,View, Text, ImageBackground, Image, ScrollView } from 'react-native';
+import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 
 
 class Home extends React.Component {
 
-
 render(){
 return <>
-    <ImageBackground source={ require("../assets/eiffel-tower.jpg") } style={ styles.backgound  }>
-    <ScrollView>
-      <View style={ styles.container }>
-        
-        <View style={ styles.textoYlogo }>
-          <Image source={ require("../assets/traveller.png") } style={ styles.logo } />
-          <Text style={ styles.textoLogo }>Mytinerary</Text>
-        </View>
-
-        <View style={ styles.textoYboton }>
-            <Text style={ styles.findyour } >Find your perfect trip , designed by insiders who knows and love their cities!</Text>
-            <View style={ styles.letsContainer } >
-              <Text onPress={ ()=> this.props.navigation.navigate("Cities") }  style={ styles.letsButton } >Let's begin</Text>
+          <ImageBackground source={ require("../assets/eiffel-tower.jpg") } style={ styles.backgound  }>
+          <ScrollView>
+            <View style={ styles.container }>
               
+              <View style={ styles.textoYlogo }>
+                <Image source={ require("../assets/traveller.png") } style={ styles.logo } />
+                <Text style={ styles.textoLogo }>Mytinerary</Text>
+              </View>
+
+              <View style={ styles.textoYboton }>
+                  <Text style={ styles.findyour } >Find your perfect trip , designed by insiders who knows and love their cities!</Text>
+                  <View style={ styles.letsContainer } >
+                    <Text onPress={ ()=> this.props.navigation.navigate("Cities") }  style={ styles.letsButton } >Let's begin</Text>
+                    
+                  </View>
+              </View>
+
+              <View style={ styles.secondSection }>
+                <Text style={ styles.title }>Popular Mytineraries</Text>
+                  <Carousel />
             </View>
-        </View>
 
-        <View style={ styles.secondSection }>
-          <Text style={ styles.title }>Popular Mytineraries</Text>
-            <Carousel />
-      </View>
-
-      </View>
-    </ScrollView>
-    </ImageBackground>
+            </View>
+          </ScrollView>
+          </ImageBackground>
     </>
 }
 }
 
 export default Home
+
+
+
 
 const styles = StyleSheet.create({
     backgound:{

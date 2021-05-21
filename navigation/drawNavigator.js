@@ -29,3 +29,15 @@ const User = ()=>{
         <Text>User</Text>
         </View>
 }
+
+
+
+
+
+
+
+
+
+
+
+

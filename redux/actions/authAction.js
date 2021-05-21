@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authAction ={
 
@@ -18,14 +19,20 @@ const authAction ={
             } )
             .then( data => data.json() )
             .then( data =>{
-                if( data.success){ dispatch({ type:"LOGUSER", payload:data.result }) 
+                if( data.success){
+                    AsyncStorage.setItem("user", JSON.stringify( data.result ))
+                    dispatch({ type:"LOGUSER", payload:data.result }) 
                     return { success:true }
                 }
-                else{
-                    console.log( data )
-                }
+                else{ console.log( data ) }
             })
             .catch( err => console.log( err ) )
+        }
+    },
+    logOut: ()=>{
+        return ()=>{
+            AsyncStorage.setItem("user","")
+            AsyncStorage.setItem("token","")
         }
     }
 
