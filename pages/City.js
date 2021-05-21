@@ -1,32 +1,51 @@
 import React from "react"
+import { connect } from "react-redux"
+import citiesAction from "../redux/actions/citiesAction"
 import Itinerary from "../components/Itinerary"
 import { StyleSheet, ScrollView,View , Text, ImageBackground } from "react-native"
 
 
 class City extends React.Component {
 
+    state={
+        itineraries:[]
+    }
+
+    componentDidMount(){
+        this.props.fetchItinerary( this.props.route.params.city._id )
+        .then( data => this.setState({ ...this.state, itineraries: data }) )
+    }   
+
 render(){
-    console.log( this.props )
     return <ScrollView style={ styles.mainContainer }>
         <View>
-            <ImageBackground source={{ uri:"https://images.unsplash.com/photo-1493837417577-baec364a53eb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=667&q=80" }} style={ styles.cityImg } >
-                <Text style={ styles.titleCity }>Name of the city</Text>
+            <ImageBackground source={{ uri: this.props.route.params.city.img }} style={ styles.cityImg } >
+                <Text style={ styles.titleCity }>{ this.props.route.params.city.city }</Text>
             </ImageBackground>
         </View> 
         <View style={ styles.contentContainer }>
-            <Itinerary data={ "itineraries" } />
 
+            {  
+                this.state.itineraries.length 
+                ? this.state.itineraries.map( itinerary => <Itinerary key={ itinerary._id } data={ itinerary } /> )
+                : null
+            }
+            
         </View>
         
     </ScrollView>
 }
 }
+const mapDispatchStateToprops ={
+    fetchItinerary:citiesAction.fetchItinerary
+}
 
-export default City
+
+export default connect(null, mapDispatchStateToprops) (City)
 
 const styles = StyleSheet.create({
     mainContainer:{
-        marginTop:"6%"
+      /*   marginTop:"6%" */
     },
     cityImg:{
        width:"100%",

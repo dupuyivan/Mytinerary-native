@@ -1,23 +1,19 @@
 import React from "react"
+import { connect } from "react-redux"
+import citiesAction from "../redux/actions/citiesAction"
 import { StyleSheet, View, Text, ScrollView, ImageBackground, TouchableOpacity  } from "react-native"
 
 
 class Cities extends React.Component {
 
-    state={
-        cities:[]
-    }
+    state={ cities:[] }
 
     componentDidMount(){
-        fetch("https://mytinerarydupuy.herokuapp.com/api/cities")
-        .then( data => data.json() )
-        .then( data => this.setState({ ...this.state, cities: data.result }) )
-        .catch( err => console.log( err ) )
+      this.props.fetchCities()
+      .then( data => this.setState({ ...this.state, cities:data }) )
     }
 
 render(){
-    console.log( this.state.cities )
-
 return <View style={ styles.main_container }>
 
             <View style={ styles.titleContainer }>
@@ -31,7 +27,7 @@ return <View style={ styles.main_container }>
                     {   this.state.cities &&
                         this.state.cities.map( city =>{
                         return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
-                                    <TouchableOpacity onPress={ this.props.navigation.navigate("CITY",{ cityId:city._id }) }
+                                    <TouchableOpacity onPress={ ()=> this.props.navigation.navigate("City",{ city }) }
                                     style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>
                                     <Text style={styles.cardText}>{ city.city }</Text>
                                     </TouchableOpacity>
@@ -43,7 +39,12 @@ return <View style={ styles.main_container }>
         </View>
 }
 }
-export default Cities
+
+const mapDispatchToProps = {
+    fetchCities: citiesAction.fetchCities
+}
+
+export default connect(null,mapDispatchToProps) (Cities)
 
 const styles = StyleSheet.create({
     main_container:{

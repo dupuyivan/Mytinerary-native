@@ -2,12 +2,11 @@ import React from "react"
 import { StyleSheet, View, Text, Image } from "react-native"
 
 
-const Coment = ()=>{
-
+const Coment = ({ coment })=>{
 
 return <View style={ styles.coment }>
-        <Image  source={{ uri:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Adam_Sandler_2018_%28Lc9jYc07e54%29.jpg/220px-Adam_Sandler_2018_%28Lc9jYc07e54%29.jpg" }} style={ styles.imgComent}/>
-        <Text>Soy un comentario</Text>  
+        <Image  source={{ uri: coment.user_id.picture }} style={ styles.imgComent}/>
+        <Text>{ coment.comment }</Text>  
     </View>
 }
 

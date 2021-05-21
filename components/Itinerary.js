@@ -1,15 +1,26 @@
-import React, { useState } from "react"
-import { StyleSheet, View, Text, Image, Button } from "react-native"
+import React, { useState, useEffect } from "react"
+import { connect } from "react-redux"
+import citiesAction from "../redux/actions/citiesAction"
 import Comments from "../components/Comments"
+import { StyleSheet, View, Text, Image, Button, ImageBackground } from "react-native"
 
-const Itinerary = ({ data })=>{
-const [ visible, setVisible ] = useState(false)
 
+const Itinerary = ({ data, fetchActivities })=>{
+    const [ visible, setVisible ] = useState(false)
+    const [ activities, setActivities ] = useState([])
+
+
+    useEffect(()=>{
+        fetchActivities( data._id )
+        .then( data => setActivities( data ) )
+    },[])
 
 return <View style={ styles.ItineraryContainer }>
-            <Text style={ styles.title }>Title</Text>
-        <Image source={{ uri:"https://www.famousbirthdays.com/faces/dicaprio-l-image.jpg" }} style={ styles.authorImg  } />
-        <Text>Name and lastName of author</Text>
+            <Text style={ styles.title }>{ data.title }</Text>
+
+        <Image source={{ uri: data.author.img }} style={ styles.authorImg  } />
+        
+        <Text>{ data.author.name } { data.author.last_name } </Text>
         
         <View style={ styles.info }>
             <View style={ styles.littleBox }>
@@ -34,24 +45,33 @@ return <View style={ styles.ItineraryContainer }>
                 
                 <View>
                     <Text>Activities</Text>
-                    
+                    <View style={ styles.activitiesContainer }>
+                    {   activities.length
+                        ? activities.map( activity =>{
+                            return <ImageBackground key={ activity._id } style={ styles.activity } source={{ uri:activity.picture }}>
+                                <Text >{ activity.title }</Text>
+                            </ImageBackground>
+                        })
+                        : null
+                    }
+                    </View>
                 </View>
 
                 <View>
                     <Text>Comments</Text>
-                    <Comments />
+                    <Comments comments={ data.comments } />
                 </View>
 
             </View>
-
-
         </View>
-
-
         </View>
 }
 
-export default Itinerary
+const mapDispatchToProps ={
+    fetchActivities: citiesAction.fetchActivities
+}
+
+export default connect(null, mapDispatchToProps) (Itinerary)
 
 const styles = StyleSheet.create({
     ItineraryContainer:{
@@ -80,5 +100,13 @@ const styles = StyleSheet.create({
     },
     hidden:{
         display:"none"
+    },
+    activitiesContainer:{
+        flexDirection:"row",
+        justifyContent:"space-between"
+    },
+    activity:{
+        width:100,
+        height:100
     }
 }) 

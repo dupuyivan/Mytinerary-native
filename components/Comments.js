@@ -3,14 +3,15 @@ import Coment from "../components/Comment"
 import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from "react-native"
 
 
-const Comments = ()=>{
+const Comments = ({ comments })=>{
 
 return <View style={ styles.commentsContainer }>
 
-        <View>
-            <Coment />
-        </View>
-
+        {   comments.length
+            ?   comments.map( coment => <Coment key={ coment._id } coment={ coment } /> )
+            : null
+        }   
+            
         <View style={ styles.comentArea }>
             <Image source={{ uri:"https://www.famousbirthdays.com/faces/dicaprio-l-image.jpg" }} style={ styles.userImg } />
             <TextInput placeholder="Write a comment" style={ styles.cometInput } />

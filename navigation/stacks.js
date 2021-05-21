@@ -9,7 +9,7 @@ const stack = createStackNavigator()
 export const StackHome = () =>{
 
 return< stack.Navigator>
-        <stack.Screen name="Home" component={ Home }  />
+        <stack.Screen name="Home" component={ Home } options={{ headerShown:false }}  />
         <stack.Screen name="Cities" component={ Cities } />
         <stack.Screen name="City" component={ City } />
     </stack.Navigator>
