@@ -31,7 +31,7 @@ return <View style={ styles.main_container }>
                     {   this.state.cities &&
                         this.state.cities.map( city =>{
                         return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
-                                    <TouchableOpacity onPress={ ()=> this.props.navigation.navigate("City",{cityId :city._id }) }
+                                    <TouchableOpacity onPress={ this.props.navigation.navigate("CITY",{ cityId:city._id }) }
                                     style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>
                                     <Text style={styles.cardText}>{ city.city }</Text>
                                     </TouchableOpacity>
