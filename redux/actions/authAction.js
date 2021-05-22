@@ -1,8 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authAction ={
-
     fetchCountries:()=>{
-        return(dispatch)=>{
+        return()=>{
             return fetch("https://restcountries.eu/rest/v2/all")
             .then( data => data.json() )
             .then( data => data )
@@ -18,7 +18,10 @@ const authAction ={
             } )
             .then( data => data.json() )
             .then( data =>{
-                if( data.success){ dispatch({ type:"LOGUSER", payload:data.result }) 
+                if( data.success){ 
+                    AsyncStorage.setItem("user", JSON.stringify( data.result )  )
+                    AsyncStorage.setItem("token", data.result.token )
+                    dispatch({ type:"LOGUSER", payload:data.result }) 
                     return { success:true }
                 }
                 else{

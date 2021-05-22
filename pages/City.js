@@ -24,22 +24,20 @@ render(){
             </ImageBackground>
         </View> 
         <View style={ styles.contentContainer }>
-
             {  
                 this.state.itineraries.length 
                 ? this.state.itineraries.map( itinerary => <Itinerary key={ itinerary._id } data={ itinerary } /> )
                 : null
             }
-            
         </View>
-        
     </ScrollView>
 }
 }
+
+
 const mapDispatchStateToprops ={
     fetchItinerary:citiesAction.fetchItinerary
 }
-
 
 export default connect(null, mapDispatchStateToprops) (City)
 

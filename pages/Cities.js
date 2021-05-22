@@ -19,7 +19,7 @@ return <View style={ styles.main_container }>
             <View style={ styles.titleContainer }>
                 <Text></Text>
                 <Text style={ styles.title }>Cities</Text>
-                <Text>Busqueda</Text>
+                <Text onPress={ ()=> this.props.navigation.navigate("Search",{ cities:this.state.cities })  } >Busqueda</Text>
             </View>
 
             <ScrollView>

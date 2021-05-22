@@ -3,10 +3,10 @@
 const CitiesAction ={
 
     fetchCities:()=>{
-        return()=>{
+        return(dispatch)=>{
             return fetch("https://mytinerarydupuy.herokuapp.com/api/cities")
             .then( data => data.json() )
-            .then( data => data.result )
+            .then( data =>{ dispatch({ type:"FETCHCITIES", payload: data.result });return data.result  })
             .catch( err => console.log( err ) )
         }
     },

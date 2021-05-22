@@ -59,7 +59,7 @@ return <View style={ styles.ItineraryContainer }>
 
                 <View>
                     <Text>Comments</Text>
-                    <Comments comments={ data.comments } />
+                    <Comments comments={ data.comments } ItineraryId={ data._id } />
                 </View>
 
             </View>
