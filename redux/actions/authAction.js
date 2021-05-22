@@ -30,9 +30,10 @@ const authAction ={
         }
     },
     logOut: ()=>{
-        return ()=>{
+        return (dispatch)=>{
             AsyncStorage.setItem("user","")
             AsyncStorage.setItem("token","")
+            dispatch({ type:"LOGOUT" })
         }
     }
 

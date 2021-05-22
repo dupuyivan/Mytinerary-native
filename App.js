@@ -18,24 +18,18 @@ import DrawerNavigator from "./navigation/drawNavigator"
 
 const store = createStore( mainReducer, applyMiddleware( reduxThunk )  )
 
-/* const HomeScreen = () => (
-  <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Text category='h1'>HOME</Text>
-  </Layout>
-); */
-
 export default function App() {
 
   return ( <>
     <Provider store={ store } >
-    <NavigationContainer >
+    {/* <NavigationContainer > */}
 
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
         <DrawerNavigator />
       </ApplicationProvider>
 
-  </NavigationContainer>
+  {/* </NavigationContainer> */}
     </Provider>
     </>
   );
