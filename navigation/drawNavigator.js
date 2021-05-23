@@ -68,7 +68,7 @@ export const DrawerNavigator = (props) => {
 )}
 
 const AppNavigator = (props) => (
-  <NavigationContainer>
+  <NavigationContainer >
     <DrawerNavigator props={ props } />
   </NavigationContainer>
 );
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
       height: 128,
       flexDirection: 'row',
       alignItems: 'center',
+      marginTop:"7%"
     },
   });
 

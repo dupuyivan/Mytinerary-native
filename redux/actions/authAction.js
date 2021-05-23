@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authAction ={
-
     fetchCountries:()=>{
         return(dispatch)=>{
             return fetch("https://restcountries.eu/rest/v2/all")
@@ -11,6 +10,7 @@ const authAction ={
         }
     },
     submitForm:(endpoint,form)=>{
+        console.log( endpoint,form )
         return( dispatch)=>{
             return fetch("http://mytinerarydupuy.herokuapp.com/api/"+ endpoint, {
                 method:"POST",
@@ -19,13 +19,14 @@ const authAction ={
             } )
             .then( data => data.json() )
             .then( data =>{
-                if( data.success){
+                
+                if( data.success ){
                     AsyncStorage.setItem("user", JSON.stringify( data.result ))
                     AsyncStorage.setItem("token",  data.result.token )
                     dispatch({ type:"LOGUSER", payload:data.result }) 
                     return { success:true }
                 }
-                else{ console.log( data ) }
+                else{ return { success:false, message:"The email or password is wrong" } }
             })
             .catch( err => console.log( err ) )
         }

@@ -1,16 +1,13 @@
 import React from "react"
 import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
-import Itinerary from "../components/Itinerary"
 import { StyleSheet, ScrollView,View , Text, ImageBackground, Image } from "react-native"
 import { Layout ,Divider, Button } from "@ui-kitten/components"
 
 class City extends React.Component {
 
-    state={
-        itineraries:[]
-    }
-
+    state={ itineraries:[] }
+        
     componentDidMount(){
         this.props.fetchItinerary( this.props.route.params.city._id )
         .then( data => this.setState({ ...this.state, itineraries: data }) )
@@ -38,7 +35,7 @@ render(){
                                 <Button title="View more" onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } /> 
                              </View>
                     })
-                    : null
+                    : <Text> We don have itineraries for { this.props.route.params.city.city } yet </Text>
                 }
             </View>
         </ScrollView>
@@ -60,7 +57,6 @@ export default connect(mapStateToProps, mapDispatchStateToprops) (City)
 
 const styles = StyleSheet.create({
     mainContainer:{
-      /*   marginTop:"6%" */
       flex:1
     },
     cityImg:{
@@ -85,7 +81,8 @@ const styles = StyleSheet.create({
     },
     title:{
         textAlign:"center",
-        fontSize: 25
+        fontSize: 30,
+        color:"white"
     },
     authorImg:{
         width:65,

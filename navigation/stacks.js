@@ -28,7 +28,7 @@ const stackHome = ({ search }) => {
     <TopNavigationAction icon={BackIcon} onPress={ ()=> navigate(path) } />
   );
 
-  const header = ({ navigation })=>(
+  const citiesStack = ({ navigation })=>(
     <Layout style={styles.container} level='1'>
         <TopNavigation
             alignment='center'
@@ -45,18 +45,37 @@ const stackHome = ({ search }) => {
       accessoryLeft={ () => renderBackAction(navigation,"Cities")  }
         accessoryRight={ ()=> <TopNavigationAction icon={ () => <Input style={ styles.searchInput } onChangeText={ search } /> }  />  }
       />
-      <Search />
+      <Search navigation={ navigation } />
     </Layout>
   )
+
+  const city = ({ navigation, route }) =>(
+    <Layout style={styles.container} level='1'>
+      <TopNavigation
+      accessoryLeft={ () => renderBackAction( navigation,"Cities")  }
+      />
+      < City navigation={ navigation } route={ route } />
+    </Layout>
+  )
+
+  const itinerary = ({ navigation, route }) =>(
+    <Layout style={styles.container} level='1'>
+      <TopNavigation
+      accessoryLeft={ () => renderBackAction( navigation,"Cities")  }
+      />
+      < Itinerary navigation={ navigation } route={ route } />
+    </Layout>
+  )
+
 
 /* --------------------------------------------------------------- */
 
   return (
       <stack.Navigator  >
           <stack.Screen name="Home" component={ Home } options={{ headerShown:false }} />
-          <stack.Screen name="Cities" component={ header } options={{ headerShown:false }} />
-          <stack.Screen name="City" component={ City } options={{ headerShown:false }} />
-          <stack.Screen name="Itinerary" component={ Itinerary } options={{ headerShown:false }} />
+          <stack.Screen name="Cities" component={ citiesStack } options={{ headerShown:false }} />
+          <stack.Screen name="City" component={ city } options={{ headerShown:false }} />
+          <stack.Screen name="Itinerary" component={ itinerary } options={{ headerShown:false }} />
           <stack.Screen name="Search" component={ searchStack } options={{ headerShown:false }} />
     </stack.Navigator>
   );
@@ -73,7 +92,8 @@ export default connect(null,mapDispatchToProps) (stackHome)
 const styles = StyleSheet.create({
   container: {
     minHeight: 128,
-    flex:1
+    flex:1,
+    marginTop:"6%"
   },
   searchInput:{
     width:300

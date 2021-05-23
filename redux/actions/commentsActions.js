@@ -43,6 +43,17 @@ const commentsAction ={
         .then( data => data.result )
         .catch( err => console.log( err ) )
         }
+    },
+    like_unlike:( id_Itinerary )=>{
+        return ()=>{
+          return fetch("https://mytinerarydupuy.herokuapp.com/api/like/" + id_Itinerary ,{ 
+                method:"POST",
+                headers:{ "Authorization":"Bearer " + token }
+            })
+            .then(data => data.json() )
+            .then( data => data.result )   
+            .catch( err => console.log( err ) )
+        }
     }
 }
 

@@ -13,7 +13,7 @@ const Comments = ({ comments,itineraryId, sendComment,deleteComment,updateCommen
         if( type === "send" ){ 
             sendComment(itineraryId, newComment ).then( res => setLocalComments( res ) )
         }
-        else if( type === "delete" ){
+        else if( type === "delete" ){ 
             deleteComment(itineraryId, idComment ).then( res => setLocalComments( res ) )
         }
         else{

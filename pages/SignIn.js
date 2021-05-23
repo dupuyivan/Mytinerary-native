@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
 import authAction from "../redux/actions/authAction"
-import { StyleSheet, View  } from "react-native"
-import { Layout, Input, Button,Text  } from '@ui-kitten/components';
+import { StyleSheet, View,ToastAndroid  } from "react-native"
+import { Layout, Input, Button,Text   } from '@ui-kitten/components';
 
 class SignIn extends React.Component {
 
@@ -11,15 +11,20 @@ class SignIn extends React.Component {
  readForm = (field, value)=>{ this.setState({ ...this.state, form:{ ...this.state.form, [field]:value } }) }
 
  submitForm=()=>{
+    if( !this.state.form.email.length && !this.state.form.password.length ){ return null }
     this.props.submitForm("signin",this.state.form )
-    .then( data => data.success && this.props.navigation.navigate("Home") )
+    .then( data =>{
+    data.success 
+    ? this.props.navigation.navigate("Home") 
+    : ToastAndroid.show( data.message , ToastAndroid.SHORT)
+    })
  }
 
 render(){
     return <Layout style={ styles.mainContainer }>
                 <Text style={ styles.title }>SignIn</Text>
-                <View>
-                        <Text style={styles.text} category='s1'>Email</Text>
+                        <View>
+                            <Text style={styles.text} category='s1'>Email</Text>
                             <Input placeholder='Place your Text' onChangeText={ value => this.readForm("email",value)} />
                         </View>
                         <View style={ styles.containers }>

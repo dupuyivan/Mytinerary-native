@@ -1,7 +1,8 @@
 
 const initialState ={
     cities:[],
-    citiesFiltered:undefined
+    citiesFiltered:[],
+    value:""
 }
 
 const citiesReducer = ( state =initialState , action )=>{
@@ -15,10 +16,10 @@ const citiesReducer = ( state =initialState , action )=>{
         case "SEARCH":
             return{
                 ...state, 
-                citiesFiltered: state.citiesFiltered 
-                && state.cities.filter( city => city.city.trim().toLowerCase().indexOf( action.payload ) === 0 ).length 
+                citiesFiltered: state.cities.filter( city => city.city.trim().toLowerCase().indexOf( action.payload ) === 0 ).length 
                     ? state.cities.filter( city => city.city.trim().toLowerCase().indexOf( action.payload ) === 0 )
-                    : false
+                    : [],
+                value:action.payload    
         
             }
         default: return state

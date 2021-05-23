@@ -1,5 +1,3 @@
-
-
 const CitiesAction ={
 
     fetchCities:()=>{
@@ -30,7 +28,7 @@ const CitiesAction ={
             .then( data => data.result )
             .catch( err => console.log( err ) )
         }
-    }
+    },
 }
 
 export default CitiesAction

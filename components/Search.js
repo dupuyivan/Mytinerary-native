@@ -1,39 +1,39 @@
 import React from "react"
 import { connect } from "react-redux"
-import { StyleSheet,ScrollView, ImageBackground,TouchableOpacity  } from "react-native"
+import { StyleSheet,ScrollView, ImageBackground,TouchableOpacity,View  } from "react-native"
 import { Layout, Text } from"@ui-kitten/components"
 
 
-const Search = ({ citiesFiltered })=>{
-
-    console.log( citiesFiltered )
+const Search = ({ navigation, citiesFiltered, value })=>{
+ 
 
 return <Layout style={ styles.layout }  >
         <ScrollView style={ styles.mainContainer }>
 
-            {/* {  citiesFiltered.length
+            {  citiesFiltered.length
                 ? citiesFiltered.map( city =>{
+                    console.log("filtered", city )
                     return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
-                                <TouchableOpacity onPress={ ()=> this.props.navigation.navigate("City",{ city }) }
+                                <TouchableOpacity onPress={ ()=> navigation.navigate("City",{ city }) }
                                 style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>
                                 <Text style={styles.cardText}>{ city.city }</Text>
                                 </TouchableOpacity>
                             </ImageBackground>
                     })
-                : typeof citiesFiltered === "boolean"
+                : value.length && !citiesFiltered.length
                     ? <View>
                         <Text>No results</Text>
                     </View> 
                     : <Text>Search something</Text>
-            } */}
-            <Text>results</Text>
+            }
         </ScrollView>
     </Layout>
 }
 
 const mapStatetoProps = state =>{
     return{
-        citiesFiltered: state.citiesReducer.citiesFiltered
+        citiesFiltered: state.citiesReducer.citiesFiltered,
+        value: state.citiesReducer.value
     }
 }
 
@@ -49,6 +49,16 @@ const styles = StyleSheet.create({
     text:{
         color:"white",
         marginTop:"20%"
+    },
+    image:{ 
+        width:"100%",
+        height:300,
+        alignItems:"center",
+        justifyContent:"center"
+    },
+    cardText:{
+        fontSize:40,
+        color:"white"
     }
 })
 

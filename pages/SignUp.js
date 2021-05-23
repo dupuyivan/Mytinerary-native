@@ -1,8 +1,8 @@
 import React from "react"
 import authAction from "../redux/actions/authAction"
 import { connect } from "react-redux"
-import RNPickerSelect from 'react-native-picker-select'
-import { StyleSheet ,ScrollView, View } from "react-native"
+import { Form, TextValidator } from 'react-native-validator-form';
+import { StyleSheet ,ScrollView, View, ToastAndroid } from "react-native"
 import { Layout, Input, Select, SelectItem, IndexPath, Button,Text  } from '@ui-kitten/components';
  
 class SignUp extends React.Component {
@@ -11,7 +11,7 @@ class SignUp extends React.Component {
     state={
         countries:[],
         form:{ name:"",last_name:"",country:"",picture:"",email:"",password:"" },
-        selectedIndex: new IndexPath(0)
+        selectedIndex: new IndexPath(0),
     }
 
     componentDidMount(){
@@ -23,9 +23,28 @@ class SignUp extends React.Component {
     readForm =( input, value )=>{ this.setState({ ...this.state,form:{ ...this.state.form, [input]:value }}) }
       
     submitForm =()=>{
+        if(!this.state.form.password.length ){ return null }
         this.props.submitForm( "signup", this.state.form )
-        .then( data => data.success && this.props.navigation.navigate("Home") )
-    }
+        .then( data => data.success
+            ? this.props.navigation.navigate("Home") 
+            : ToastAndroid.show( data.message , ToastAndroid.SHORT, ToastAndroid.TOP)    
+        )}
+
+
+/* ---------------------------------------------------- */
+
+
+handleChange = (email) => {
+    this.setState({ email });
+}
+
+submit = () => {
+    // your submit logic
+}
+
+handleSubmit = () => {
+    this.refs.form.submit();
+}
 
 
 render(){
@@ -36,18 +55,25 @@ render(){
 
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>First name</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("name",value) } />
+                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                    /^[a-zA-Z ,.'-]+$/.test( value ) 
+                    ?   this.readForm("name",value)
+                    : ToastAndroid.show( "name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Last name</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("last_name",value) } />
+                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                    /^[a-zA-Z ,.'-]+$/.test( value ) 
+                    ?   this.readForm("last_name",value)
+                    : ToastAndroid.show( "last_name is invalid" , ToastAndroid.SHORT)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Country</Text>
                 <Select 
+                        value={ ()=> <Text>{ this.state.countries[ this.state.selectedIndex ]  }</Text> }
                         selectedIndex={this.state.selectedIndex}
-                        onSelect={index => this.setState({...this.state, selectedIndex: index  })  }>
-                        <SelectItem title='Select a country'/>
+                        onSelect={index =>{ this.setState({...this.state, selectedIndex: index.row  })
+                        this.readForm("country", this.state.countries[ index.row -1 ]  ) }}>
                         {   this.state.countries.length
                             ? this.state.countries.map( country => <SelectItem key={ country } title={ country } /> )
                             : null
@@ -56,21 +82,59 @@ render(){
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Picture</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("picture",value) } />
+                <Input placeholder='Place your Text' onChangeText={ value=>this.readForm("picture",value) } />
             </View>
             <View>
                 <Text style={styles.text} category='s1'>Email</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("email",value) } />
+                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test( value ) 
+                    ?   this.readForm("email",value)
+                    : ToastAndroid.show( "email is invalid" , ToastAndroid.SHORT)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Password</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("password",value) } />
+                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                    /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test( value ) 
+                    ?   this.readForm("password",value)
+                    : ToastAndroid.show( "password is invalid" ,ToastAndroid.SHORT)  }} />
             </View>
 
             <Button style={styles.button} appearance='outline' onPress={ this.submitForm }>
                 SignUp
                 </Button>
+
+        {/* <Form style={ styles.containers } ref="form" onSubmit={this.handleSubmit} >
+
+                <TextValidator   style={styles.text}
+                    name="name"
+                    validators={['required']}
+                    errorMessages={['This field is required']}
+                    type="text"
+                    keyboardType="text"
+                    value={this.state.name}
+                    onChangeText={this.handleChange}
+                />
+                <TextValidator   style={styles.text}
+                    name="email"
+                    label="email"
+                    validators={['required', 'isEmail']}
+                    errorMessages={['This field is required', 'Email invalid']}
+                    placeholder="Your email"
+                    type="text"
+                    keyboardType="email-address"
+                    value={this.state.email}
+                    onChangeText={this.handleChange}
+                />
+                 <Button
+                    title="Submit"
+                    onPress={this.handleSubmit}
+                />
+            </Form> */}
+
+
+
              </Layout>
+
     </ScrollView>
 }
 }
@@ -99,37 +163,6 @@ const styles = StyleSheet.create({
     button: {
         margin: 2,
     },
-    /* title:{
-        fontSize:40,
-        textAlign:"center",
-        marginTop:10,
-        marginBottom:20
-    },
-    placeHolders:{  
-        marginBottom:20
-    },
-    placeholder:{
-        fontSize: 20
-    },
-    input:{
-        borderStyle:"solid",
-        borderColor:"black",
-        width:"75%",
-        backgroundColor:"black",
-        borderRadius:10,
-        backgroundColor:"#D7E3EE",
-        paddingLeft:4
-    },
-    buttonContainer:{
-        width:"60%",
-        textAlign:"center",
-        backgroundColor:"#379BF3",
-        padding:20,
-        borderRadius:50
-    },
-    send:{
-        textAlign:"center"
-    }, */
     inputAndroid: {
         textAlign:"center",
         fontSize: 16,
@@ -139,58 +172,7 @@ const styles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
       },
 
 })
-
-
-/* <Text style={ styles.title }>SignUp</Text>
-
-                    <View style={ styles.placeHolders }>
-                    <Text style={styles.text} category='s1'>S1</Text>
-                        <Text style={ styles.placeholder }>First Name</Text>
-                        <Input onChangeText={( value => this.readForm("name",value) )  } style={ styles.input } />
-                    </View>
-                    <View style={ styles.placeHolders }>
-                    <Text style={ styles.placeholder }>Last name</Text>
-                        <Input onChangeText={( value => this.readForm("last_name",value) )  } style={ styles.input } />
-                    </View>
-                    <View style={ styles.placeHolders }>
-                    <Text style={ styles.placeholder }>Country</Text>
-
-                    <RNPickerSelect
-                    placeholder={{ label:"Select a your country", value:"" }}
-                    items={this.state.countries}
-                    onValueChange={ value => this.readForm("country", value ) }
-                    style={ styles }
-                    />
-
-                    <Select 
-                        selectedIndex={this.state.selectedIndex}
-                        onSelect={index => this.setState({...this.state, selectedIndex: index  })  }>
-                        <SelectItem title='Option 1'/>
-                        <SelectItem title='Option 2'/>
-                        <SelectItem title='Option 3'/>
-                    </Select>
-
-
-                    </View>
-                    <View style={ styles.placeHolders }>
-                    <Text style={ styles.placeholder }>Picture</Text>
-                        <Input onChangeText={( value => this.readForm("picture",value ) )} style={ styles.input } />
-                    </View>
-                    <View style={ styles.placeHolders }>
-                    <Text style={ styles.placeholder }>Email</Text>
-                        <Input onChangeText={( value => this.readForm("email",value ) )} style={ styles.input } />
-                    </View>
-                    <View style={ styles.placeHolders } >
-                    <Text style={ styles.placeholder }>Password</Text>
-                        <Input onChangeText={( value => this.readForm("password",value ) )} style={ styles.input } />
-                    </View>
-                    <View style={ styles.placeHolders }>
-                    <TouchableOpacity style={ styles.buttonContainer } >
-                        <Text onPress={ this.submitForm } style={ styles.send }>SignUp</Text>
-                    </TouchableOpacity>
-                    </View> 
-*/
