@@ -3,11 +3,16 @@
 const CitiesAction ={
 
     fetchCities:()=>{
-        return()=>{
+        return(dispatch)=>{
             return fetch("https://mytinerarydupuy.herokuapp.com/api/cities")
             .then( data => data.json() )
-            .then( data => data.result )
+            .then( data => dispatch({ type:"LOADCITIES", payload: data.result }) )
             .catch( err => console.log( err ) )
+        }
+    },
+    search:( value )=>{
+        return(dispatch)=>{
+            dispatch({ type:"SEARCH", payload:value.trim().toLowerCase() })
         }
     },
     fetchItinerary:(idCity)=>{

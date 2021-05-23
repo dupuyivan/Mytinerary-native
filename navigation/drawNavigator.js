@@ -6,7 +6,7 @@ import { StyleSheet, ImageBackground } from "react-native"
 import { Drawer, DrawerItem,Button, Layout, Text, IndexPath,Divider, Icon } from '@ui-kitten/components';
 import authAction from "../redux/actions/authAction"
 
-import { StackHome } from "../navigation/stacks"
+import stackHome  from "../navigation/stacks"
 import SignUp from "../pages/SignUp"
 import SignIn from "../pages/SignIn"
 
@@ -18,13 +18,6 @@ const PersonIcon = (props) => (
   <Icon {...props} name='person-outline'/>
 );
 
-const BellIcon = (props) => (
-  <Icon {...props} name='bell-outline'/>
-);
-
-const ForwardIcon = (props) => (
-  <Icon {...props} name='arrow-ios-forward'/>
-);
 
 Header = (props) => (
   <React.Fragment>
@@ -62,7 +55,7 @@ export const DrawerNavigator = (props) => {
     propsG = props.props
     return(
   <Navigator drawerContent={props => <DrawerContent {...props }/>}>
-    <Screen name='Home' component={ StackHome }/>
+    <Screen name='Home' component={ stackHome }/>
     {   !propsG.userLogged
         ? <>
             <Screen name='SignUp' component={ SignUp }/>

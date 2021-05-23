@@ -22,14 +22,13 @@ export default function App() {
 
   return ( <>
     <Provider store={ store } >
-    {/* <NavigationContainer > */}
+
 
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
         <DrawerNavigator />
       </ApplicationProvider>
 
-  {/* </NavigationContainer> */}
     </Provider>
     </>
   );

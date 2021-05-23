@@ -2,69 +2,51 @@ import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
 import Comments from "../components/Comments"
-import { StyleSheet, View, Text, Image, Button, ImageBackground } from "react-native"
+import { StyleSheet, View, ScrollView } from "react-native"
+import { Divider, Text, Button, Layout, Avatar } from "@ui-kitten/components"
+import { SliderBox } from "react-native-image-slider-box";
 
-
-const Itinerary = ({ data, fetchActivities })=>{
-    const [ visible, setVisible ] = useState(false)
+const Itinerary = ({ route:{ params: itinerary }, fetchActivities, navigation })=>{
     const [ activities, setActivities ] = useState([])
 
-
     useEffect(()=>{
-        fetchActivities( data._id )
-        .then( data => setActivities( data ) )
+        fetchActivities( itinerary.itinerary._id )
+        .then( data => setActivities( data.map( activity => activity.picture ) ) )
     },[])
 
-return <View style={ styles.ItineraryContainer }>
-            <Text style={ styles.title }>{ data.title }</Text>
+return <Layout style={ styles.mainContainer }>
+        {/* <ScrollView > */}
+            <Text style={ styles.ItineraryTitle } category='h1'>{ itinerary.itinerary.title }</Text>
 
-        <Image source={{ uri: data.author.img }} style={ styles.authorImg  } />
-        
-        <Text>{ data.author.name } { data.author.last_name } </Text>
-        
-        <View style={ styles.info }>
-            <View style={ styles.littleBox }>
-                <Text>Price</Text>
-            </View>
-            <View style={ styles.littleBox }>
-                <Text>Duration</Text>
-            </View>
-            <View style={ styles.littleBox }>
-                <Text>Like</Text>
-            </View>
-        </View>
-        <View style={ styles.hashtags }>
-            <Text>Hashtags</Text>
-        </View>
+            <View style={ styles.firstContainer }>
 
-        <View style={ styles.viewMore }>
-
-            <Button title={ !visible ? "View more" : "View less" } onPress={ ()=> setVisible(!visible ) } /> 
-
-            <View style={ visible ? styles.visible : styles.hidden }>
-                
-                <View>
-                    <Text>Activities</Text>
-                    <View style={ styles.activitiesContainer }>
-                    {   activities.length
-                        ? activities.map( activity =>{
-                            return <ImageBackground key={ activity._id } style={ styles.activity } source={{ uri:activity.picture }}>
-                                <Text >{ activity.title }</Text>
-                            </ImageBackground>
-                        })
-                        : null
-                    }
+                <View style={ styles.author }>
+                    <Avatar style={styles.avatar} size='giant' source={{ uri: itinerary.itinerary.author.img }} />
+                    <View style={ styles.names }>
+                    <Text>{ itinerary.itinerary.author.name }</Text>
+                    <Text>{ itinerary.itinerary.author.last_name }</Text>
                     </View>
                 </View>
-
-                <View>
-                    <Text>Comments</Text>
-                    <Comments comments={ data.comments } />
+                <View style={ styles.info }>
+                    <Text>Price</Text>
+                    <Text>duration</Text>
+                    <Text>hasttahs</Text>
                 </View>
-
             </View>
-        </View>
-        </View>
+
+            <View> 
+                <Text style={ styles.activities } category='h1'>Activities</Text>
+                {   activities.length
+                    ? <SliderBox images={ activities } />
+                    : null
+                }
+            </View>
+            <View>
+                <Comments comments={ itinerary.itinerary.comments } itineraryId={ itinerary.itinerary._id  } />
+            </View>
+
+        {/* </ScrollView> */}
+    </Layout>
 }
 
 const mapDispatchToProps ={
@@ -74,39 +56,33 @@ const mapDispatchToProps ={
 export default connect(null, mapDispatchToProps) (Itinerary)
 
 const styles = StyleSheet.create({
-    ItineraryContainer:{
-        width:"100%",
+    mainContainer:{
+        marginTop:"6%",
+        flex:1
     },
-    authorImg:{
-        width:50,
-        height:50,
-        borderRadius:50
+    ItineraryTitle:{
+        color: "white",
+        textAlign:"center",
     },
-    info:{
+    firstContainer:{
+        marginBottom:5
+    },
+    author:{
+        alignSelf:"center"
+    },
+    avatar:{
+        alignSelf:"center"
+    },
+    names:{
         flexDirection:"row"
     },
-    littleBox:{
-        marginLeft:5
-    },
-    hashtags:{
+    info:{
         flexDirection:"row",
         justifyContent:"space-around"
     },
-    viewMore:{
-
-    },
-    visible:{
-        display:"flex"
-    },
-    hidden:{
-        display:"none"
-    },
-    activitiesContainer:{
-        flexDirection:"row",
-        justifyContent:"space-between"
-    },
-    activity:{
-        width:100,
-        height:100
+    activities:{
+        textAlign:"center",
+        fontSize:30,
+        marginBottom:5
     }
 }) 

@@ -10,22 +10,16 @@ class Cities extends React.Component {
 
     componentDidMount(){
       this.props.fetchCities()
-      .then( data => this.setState({ ...this.state, cities:data }) )
-    }
+      this.setState({ ...this.state, cities:this.props.cities }) 
+    } 
 
 render(){
 return <View style={ styles.main_container }>
 
-            <View style={ styles.titleContainer }>
-                <Text></Text>
-                <Text style={ styles.title }>Cities</Text>
-                <Text>Busqueda</Text>
-            </View>
-
             <ScrollView>
                 <View style={ styles.containerContent }>
-                    {   this.state.cities &&
-                        this.state.cities.map( city =>{
+                    {   this.props.cities &&
+                        this.props.cities.map( city =>{
                         return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
                                     <TouchableOpacity onPress={ ()=> this.props.navigation.navigate("City",{ city }) }
                                     style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>
@@ -40,11 +34,17 @@ return <View style={ styles.main_container }>
 }
 }
 
+const mapStateToProps = state =>{
+    return{
+        cities: state.citiesReducer.cities
+    }
+}
+
 const mapDispatchToProps = {
     fetchCities: citiesAction.fetchCities
 }
 
-export default connect(null,mapDispatchToProps) (Cities)
+export default connect(mapStateToProps,mapDispatchToProps) (Cities)
 
 const styles = StyleSheet.create({
     main_container:{

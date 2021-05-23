@@ -2,8 +2,8 @@ import React from "react"
 import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
 import Itinerary from "../components/Itinerary"
-import { StyleSheet, ScrollView,View , Text, ImageBackground } from "react-native"
-
+import { StyleSheet, ScrollView,View , Text, ImageBackground, Image } from "react-native"
+import { Layout ,Divider, Button } from "@ui-kitten/components"
 
 class City extends React.Component {
 
@@ -17,23 +17,32 @@ class City extends React.Component {
     }   
 
 render(){
-    return <ScrollView style={ styles.mainContainer }>
-        <View>
-            <ImageBackground source={{ uri: this.props.route.params.city.img }} style={ styles.cityImg } >
-                <Text style={ styles.titleCity }>{ this.props.route.params.city.city }</Text>
-            </ImageBackground>
-        </View> 
-        <View style={ styles.contentContainer }>
-
-            {  
-                this.state.itineraries.length 
-                ? this.state.itineraries.map( itinerary => <Itinerary key={ itinerary._id } data={ itinerary } /> )
-                : null
-            }
-            
-        </View>
-        
-    </ScrollView>
+    return <Layout style={ styles.mainContainer }>
+        <ScrollView >
+            <View>
+                <ImageBackground source={{ uri: this.props.route.params.city.img }} style={ styles.cityImg } >
+                    <Text style={ styles.titleCity }>{ this.props.route.params.city.city }</Text>
+                </ImageBackground>
+            </View> 
+            <View style={ styles.contentContainer }>
+                {  
+                    this.state.itineraries.length 
+                    ? this.state.itineraries.map( itinerary =>{
+                          return <View key={ itinerary._id } style={ styles.ItineraryContainer } >
+                                <Text style={ styles.title }>{ itinerary.title }</Text>
+                                     <View style={ styles.author }>
+                                        <Image source={{ uri: itinerary.author.img }} style={ styles.authorImg  } />
+                                        <Text>{ itinerary.author.name } { itinerary.author.last_name } </Text>
+                                        <Divider />
+                                    </View>
+                                <Button title="View more" onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } /> 
+                             </View>
+                    })
+                    : null
+                }
+            </View>
+        </ScrollView>
+    </Layout>
 }
 }
 
@@ -52,6 +61,7 @@ export default connect(mapStateToProps, mapDispatchStateToprops) (City)
 const styles = StyleSheet.create({
     mainContainer:{
       /*   marginTop:"6%" */
+      flex:1
     },
     cityImg:{
        width:"100%",
@@ -65,6 +75,22 @@ const styles = StyleSheet.create({
     },
     contentContainer:{
         alignItems:"center"
-    }
+    },
+    author:{
+        flexDirection:"row",
+        alignItems:"center"
+    },
+    ItineraryContainer:{
+        width:"100%",
+    },
+    title:{
+        textAlign:"center",
+        fontSize: 25
+    },
+    authorImg:{
+        width:65,
+        height:65,
+        borderRadius:50
+    },
 
 })

@@ -21,6 +21,7 @@ const authAction ={
             .then( data =>{
                 if( data.success){
                     AsyncStorage.setItem("user", JSON.stringify( data.result ))
+                    AsyncStorage.setItem("token",  data.result.token )
                     dispatch({ type:"LOGUSER", payload:data.result }) 
                     return { success:true }
                 }

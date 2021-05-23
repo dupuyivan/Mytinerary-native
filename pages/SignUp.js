@@ -2,8 +2,8 @@ import React from "react"
 import authAction from "../redux/actions/authAction"
 import { connect } from "react-redux"
 import RNPickerSelect from 'react-native-picker-select'
-import { StyleSheet ,ScrollView, View , Text, TouchableOpacity } from "react-native"
-import { Layout, Input, Select, SelectItem, IndexPath, Button  } from '@ui-kitten/components';
+import { StyleSheet ,ScrollView, View } from "react-native"
+import { Layout, Input, Select, SelectItem, IndexPath, Button,Text  } from '@ui-kitten/components';
  
 class SignUp extends React.Component {
 
@@ -36,11 +36,11 @@ render(){
 
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>First name</Text>
-                <Input placeholder='Place your Text' />
+                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("name",value) } />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Last name</Text>
-                <Input placeholder='Place your Text' />
+                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("last_name",value) } />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Country</Text>
@@ -56,19 +56,20 @@ render(){
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Picture</Text>
-                <Input placeholder='Place your Text' />
+                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("picture",value) } />
             </View>
             <View>
                 <Text style={styles.text} category='s1'>Email</Text>
-                <Input placeholder='Place your Text' />
+                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("email",value) } />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Password</Text>
-                <Input placeholder='Place your Text' />
+                <Input placeholder='Place your Text' onChangeText={ value=>this.submitForm("password",value) } />
             </View>
 
-            <Button style={styles.button} appearance='outline'>SignUp</Button>
-
+            <Button style={styles.button} appearance='outline' onPress={ this.submitForm }>
+                SignUp
+                </Button>
              </Layout>
     </ScrollView>
 }
@@ -95,9 +96,9 @@ const styles = StyleSheet.create({
         fontSize:20,
         textAlign:"center"
       },
-      button: {
+    button: {
         margin: 2,
-      },
+    },
     /* title:{
         fontSize:40,
         textAlign:"center",

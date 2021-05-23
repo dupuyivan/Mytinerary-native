@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
 import authAction from "../redux/actions/authAction"
-
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native"
+import { StyleSheet, View  } from "react-native"
+import { Layout, Input, Button,Text  } from '@ui-kitten/components';
 
 class SignIn extends React.Component {
 
@@ -16,30 +16,27 @@ class SignIn extends React.Component {
  }
 
 render(){
-    return <View style={ styles.mainContainer }>
-    <Text style={ styles.title }>SignIn</Text>
+    return <Layout style={ styles.mainContainer }>
+                <Text style={ styles.title }>SignIn</Text>
+                <View>
+                        <Text style={styles.text} category='s1'>Email</Text>
+                            <Input placeholder='Place your Text' onChangeText={ value => this.readForm("email",value)} />
+                        </View>
+                        <View style={ styles.containers }>
+                            <Text style={styles.text} category='s1'>Password</Text>
+                            <Input placeholder='Place your Text' onChangeText={ value => this.readForm("password",value)} />
+                        </View>
 
-    <View style={ styles.placeHolders }>
-    <Text style={ styles.placeholder }>Email</Text>
-        <TextInput style={ styles.input } onChangeText={ v => this.readForm("email", v) } />
-    </View>
-    <View style={ styles.placeHolders } >
-    <Text style={ styles.placeholder }>Password</Text>
-        <TextInput style={ styles.input } onChangeText={ v => this.readForm("password", v) } />
-    </View>
-    <View style={ styles.placeHolders }>
-       <TouchableOpacity style={ styles.buttonContainer } >
-           <Text onPress={ this.submitForm } style={ styles.send }>SignIn</Text>
-       </TouchableOpacity>
-    </View>
-</View>
+                    <Button style={styles.button} appearance='outline' onPress={ this.submitForm }>
+                        Signin
+                    </Button>
+        </Layout>
 }
 }
 
 const mapDispatchToProps ={
     submitForm:authAction.submitForm
 }
-
 
 export default connect(null, mapDispatchToProps) (SignIn)
 
@@ -49,36 +46,19 @@ const styles = StyleSheet.create({
         flex:1 
     },
     title:{
-        fontSize:40,
         textAlign:"center",
-        marginTop:10,
-        marginBottom:20
+        fontSize:20
     },
-    placeHolders:{
-        alignItems:"center",
-        marginBottom:20
+    containers:{
+        marginBottom:"4%"
     },
-    placeholder:{
-        fontSize: 20
-    },
-    input:{
-        borderStyle:"solid",
-        borderColor:"black",
-        width:"75%",
-        backgroundColor:"black",
-        borderRadius:10,
-        backgroundColor:"#D7E3EE",
-        paddingLeft:4
-    },
-    buttonContainer:{
-        width:"60%",
-        textAlign:"center",
-        backgroundColor:"#379BF3",
-        padding:20,
-        borderRadius:50
-    },
-    send:{
+    text: {
+        margin: 2,
+        fontSize:20,
         textAlign:"center"
+      },
+    button: {
+        margin: 2,
     }
 
 })
