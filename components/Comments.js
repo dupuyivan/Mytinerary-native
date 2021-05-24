@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
         marginRight:2
     },
     cometInput:{
-        width:"65%",
+        width:"75%",
         paddingLeft:6
     },
     icon:{
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
         marginRight:10
     },
 })

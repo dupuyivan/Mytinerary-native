@@ -32,7 +32,9 @@ render(){
                                         <Text>{ itinerary.author.name } { itinerary.author.last_name } </Text>
                                         <Divider />
                                     </View>
-                                <Button title="View more" onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } /> 
+                                <Button onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } > 
+                                    View more
+                                </Button>
                              </View>
                     })
                     : <Text> We don have itineraries for { this.props.route.params.city.city } yet </Text>

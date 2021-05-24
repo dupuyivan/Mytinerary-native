@@ -3,8 +3,8 @@ import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
 import commentsAction from "../redux/actions/commentsActions"
 import Comments from "../components/Comments"
-import { StyleSheet, View, ScrollView, TouchableOpacity, Image } from "react-native"
-import { Text, Button, Layout, Avatar, Icon } from "@ui-kitten/components"
+import { StyleSheet, View, TouchableOpacity } from "react-native"
+import { Text, Layout, Avatar, Icon,  } from "@ui-kitten/components"
 import { SliderBox } from "react-native-image-slider-box";
 import { Rating } from 'react-native-ratings';
 
@@ -40,9 +40,7 @@ const Itinerary = ({ route:{ params: itinerary }, fetchActivities, navigation, u
     }
 
 
-
 return <Layout style={ styles.mainContainer }>
-        <ScrollView >
             <Text style={ styles.ItineraryTitle } category='h1'>{ itinerary.itinerary.title }</Text>
 
             <View style={ styles.firstContainer }>
@@ -65,7 +63,6 @@ return <Layout style={ styles.mainContainer }>
                             ratingBackgroundColor='transparent'
                             ratingCount={ itinerary.itinerary.price }
                             imageSize={25}
-                            /* style={{ paddingVertical: 10 }} */
                             />
                     </View>
                     <View style={{ marginRight:60 }} >
@@ -77,15 +74,15 @@ return <Layout style={ styles.mainContainer }>
                             ratingBackgroundColor='transparent'
                             ratingCount={ itinerary.itinerary.duration }
                             imageSize={25}
-                            /* style={{ paddingVertical: 10 }} */
                             />
                     </View>
                     
-                    <View>
+                    <View style={{ flexDirection:"row" }}>
                         <Text style={{ textAlign:"center" }}>Like </Text>
                         <TouchableOpacity onPress={ Like_Unlike }>
                             <Icon style={styles.icon} fill={ state.liked ? "red" : "grey" } name='heart' />
                         </TouchableOpacity>
+                        <Text>{ state.likes.length }</Text>
                     </View> 
                 </View>
             </View>
@@ -93,15 +90,13 @@ return <Layout style={ styles.mainContainer }>
             <View> 
                 <Text style={ styles.activities } category='h1'>Activities</Text>
                 {   activities.length
-                    ? <SliderBox images={ activities } />
+                    ? <SliderBox autoplay={ true } sliderBoxHeight={145} images={ activities } />
                     : null
                 }
             </View>
-            <View>
+            <View >
                 <Comments comments={ itinerary.itinerary.comments } itineraryId={ itinerary.itinerary._id  } />
             </View>
-
-        </ScrollView>
     </Layout>
 }
 
@@ -120,7 +115,8 @@ export default connect(mapStateToProps, mapDispatchToProps) (Itinerary)
 
 const styles = StyleSheet.create({
     mainContainer:{
-        flex:1
+        flex:1,
+        paddingBottom:200
     },
     ItineraryTitle:{
         color: "white",

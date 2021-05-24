@@ -1,47 +1,60 @@
 import React,{ useState } from "react"
+import { connect } from "react-redux"
 import { StyleSheet, View, Text, Image , TouchableOpacity } from "react-native"
 import { Icon,Input } from "@ui-kitten/components"
 
 
-const Coment = ({ coment, functions })=>{
+const Coment = ({ coment, functions, userLogged })=>{
 const [ visible, setVisible ] = useState(false)
 const [ comment, setcomment ] = useState( coment.comment )
 
-
+console.log("comment", comment )
 return<View style={ styles.mainContainer }>
             <View style={ styles.comment } >
 
                 { !visible
                     ? <>
                         <Image  source={{ uri: coment.user_id.picture }} style={ styles.imgComent}/>
-                        <Text>{ comment }</Text> 
+                        <Text>{ coment.comment }</Text> 
                       </>
                     
                     : <Input style={ styles.editComent } value={ comment } onChangeText={ v => setcomment( v )  } />
                 }
             </View>
             <View style={ styles.actions }>
-                {  !visible
-                    ? <>
-                        <TouchableOpacity onPress={ ()=> setVisible(!visible) }>
-                            <Icon style={styles.icon} fill='black' name='edit-2-outline' />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={ ()=> functions("delete", coment._id ) }>
-                            <Icon style={styles.icon} fill='black' name='trash-2-outline' />
-                        </TouchableOpacity>
-                      </>
+             
+                { 
+                     userLogged && coment.user_id._id === userLogged._id && !visible
+                        ?   <>
+                                <TouchableOpacity onPress={ ()=> setVisible(!visible) }>
+                                    <Icon style={styles.icon} fill='black' name='edit-2-outline' />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={ ()=> functions("delete", coment._id ) }>
+                                    <Icon style={styles.icon} fill='black' name='trash-2-outline' />
+                                </TouchableOpacity>
+                            </>
 
-                    : <TouchableOpacity onPress={ ()=>{ functions("update",coment._id,comment  ); setVisible(false) }}>
-                            <Icon style={styles.icon} fill='black' name='arrow-right-outline' />
-                        </TouchableOpacity>  
+                        : userLogged && coment.user_id._id === userLogged._id && visible
+                           ? <TouchableOpacity onPress={ ()=>{ functions("update",coment._id,comment  ); setVisible(false) }}>
+                                <Icon style={styles.icon} fill='black' name='arrow-right-outline' />
+                            </TouchableOpacity> 
+                           : null
                 }
+
             </View>
             
         </View>
     
 }
 
-export default Coment
+const mapStateToProps = state =>{
+    return{
+        userLogged: state.authReducer.userLogged
+    }
+}
+
+
+export default connect(mapStateToProps) (Coment)
 
 const styles = StyleSheet.create({
     mainContainer:{

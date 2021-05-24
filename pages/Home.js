@@ -25,11 +25,8 @@ return <>
                   </View>
               </View>
 
-              <View style={ styles.secondSection }>
                 <Text style={ styles.title }>Popular Mytineraries</Text>
                   <Carousel />
-            </View>
-
             </View>
           </ScrollView>
           </ImageBackground>
@@ -47,7 +44,6 @@ const styles = StyleSheet.create({
       width: "100%",
       flex: 1,
       resizeMode: "cover",
-      /* marginTop:"6%" */
     },
     container: {
       marginTop:"45%"
@@ -93,7 +89,8 @@ const styles = StyleSheet.create({
       fontSize: 20
     },
     secondSection:{
-      marginTop:"10%"
+      marginTop:"10%",
+      paddingBottom:"2%"
     },
     title:{
       textAlign:"center",

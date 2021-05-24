@@ -25,11 +25,11 @@ render(){
                 <Text style={ styles.title }>SignIn</Text>
                         <View>
                             <Text style={styles.text} category='s1'>Email</Text>
-                            <Input placeholder='Place your Text' onChangeText={ value => this.readForm("email",value)} />
+                            <Input onChangeText={ value => this.readForm("email",value)} />
                         </View>
                         <View style={ styles.containers }>
                             <Text style={styles.text} category='s1'>Password</Text>
-                            <Input placeholder='Place your Text' onChangeText={ value => this.readForm("password",value)} />
+                            <Input onChangeText={ value => this.readForm("password",value)} />
                         </View>
 
                     <Button style={styles.button} appearance='outline' onPress={ this.submitForm }>
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     },
     title:{
         textAlign:"center",
-        fontSize:20
+        fontSize:30,
+        marginBottom:20
     },
     containers:{
         marginBottom:"4%"

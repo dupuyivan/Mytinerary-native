@@ -48,24 +48,25 @@ handleSubmit = () => {
 
 
 render(){
-    return <ScrollView >
-             <Layout style={ styles.mainContainer }>
+    return <Layout style={ styles.mainContainer }>
+                    <ScrollView >
+            
 
-             <Text style={styles.text} category='h1'>SignUp</Text>
+             <Text style={styles.title } category='h1'>SignUp</Text>
 
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>First name</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                <Input onChangeText={ value=>{ 
                     /^[a-zA-Z ,.'-]+$/.test( value ) 
                     ?   this.readForm("name",value)
                     : ToastAndroid.show( "name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Last name</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                <Input onChangeText={ value=>{ 
                     /^[a-zA-Z ,.'-]+$/.test( value ) 
                     ?   this.readForm("last_name",value)
-                    : ToastAndroid.show( "last_name is invalid" , ToastAndroid.SHORT)  }} />
+                    : ToastAndroid.show( "last name is invalid" , ToastAndroid.SHORT)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Country</Text>
@@ -82,18 +83,18 @@ render(){
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Picture</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>this.readForm("picture",value) } />
+                <Input onChangeText={ value=>this.readForm("picture",value) } />
             </View>
             <View>
                 <Text style={styles.text} category='s1'>Email</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                <Input onChangeText={ value=>{ 
                     /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test( value ) 
                     ?   this.readForm("email",value)
                     : ToastAndroid.show( "email is invalid" , ToastAndroid.SHORT)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Password</Text>
-                <Input placeholder='Place your Text' onChangeText={ value=>{ 
+                <Input onChangeText={ value=>{ 
                     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test( value ) 
                     ?   this.readForm("password",value)
                     : ToastAndroid.show( "password is invalid" ,ToastAndroid.SHORT)  }} />
@@ -103,39 +104,8 @@ render(){
                 SignUp
                 </Button>
 
-        {/* <Form style={ styles.containers } ref="form" onSubmit={this.handleSubmit} >
-
-                <TextValidator   style={styles.text}
-                    name="name"
-                    validators={['required']}
-                    errorMessages={['This field is required']}
-                    type="text"
-                    keyboardType="text"
-                    value={this.state.name}
-                    onChangeText={this.handleChange}
-                />
-                <TextValidator   style={styles.text}
-                    name="email"
-                    label="email"
-                    validators={['required', 'isEmail']}
-                    errorMessages={['This field is required', 'Email invalid']}
-                    placeholder="Your email"
-                    type="text"
-                    keyboardType="email-address"
-                    value={this.state.email}
-                    onChangeText={this.handleChange}
-                />
-                 <Button
-                    title="Submit"
-                    onPress={this.handleSubmit}
-                />
-            </Form> */}
-
-
-
-             </Layout>
-
-    </ScrollView>
+            </ScrollView>
+    </Layout>
 }
 }
 
@@ -150,7 +120,11 @@ const styles = StyleSheet.create({
     mainContainer:{
         marginTop:"6%",
         flex:1,
-        paddingBottom:"11%"
+    },
+    title:{ 
+        textAlign:"center",
+        fontSize:30,
+        marginBottom:20
     },
     containers:{
         marginBottom:"4%"
@@ -158,7 +132,8 @@ const styles = StyleSheet.create({
     text: {
         margin: 2,
         fontSize:20,
-        textAlign:"center"
+        textAlign:"center",
+        color:"whitesmoke"
       },
     button: {
         margin: 2,
