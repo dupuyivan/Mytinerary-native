@@ -36,7 +36,8 @@ const Itinerary = ({ route:{ params: itinerary }, fetchActivities, navigation, u
             if( !state.send ){
                 setState({ ...state, likes: await like_unlike( itinerary.itinerary._id ),send:true })
             }
-        }
+
+        }else{ ToastAndroid.showWithGravity("You must be logged",ToastAndroid.SHORT,ToastAndroid.CENTER) }
     }
 
 return <Layout style={ styles.mainContainer }>
@@ -79,8 +80,7 @@ return <Layout style={ styles.mainContainer }>
                     
                     <View style={{ flexDirection:"row" }}>
                         <Text style={{ textAlign:"center" }}>Like </Text>
-                        <TouchableOpacity onPress={ ()=>{ 
-                            !userLogged ? ToastAndroid.showWithGravity("You must be logged",ToastAndroid.SHORT,ToastAndroid.CENTER)  : Like_Unlike }}>
+                        <TouchableOpacity onPress={ Like_Unlike }>
                             <Icon style={styles.icon} fill={ state.liked ? "red" : "grey" } name='heart' />
                         </TouchableOpacity>
                         <Text>{ state.likes.length }</Text>

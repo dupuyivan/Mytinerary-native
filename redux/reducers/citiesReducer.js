@@ -16,9 +16,7 @@ const citiesReducer = ( state =initialState , action )=>{
         case "SEARCH":
             return{
                 ...state, 
-                citiesFiltered: state.cities.filter( city => city.city.trim().toLowerCase().indexOf( action.payload ) === 0 ).length 
-                    ? state.cities.filter( city => city.city.trim().toLowerCase().indexOf( action.payload ) === 0 )
-                    : [],
+                citiesFiltered: state.cities.filter( city => city.city.trim().toLowerCase().indexOf( action.payload ) === 0 ),
                 value:action.payload    
         
             }

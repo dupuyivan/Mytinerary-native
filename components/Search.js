@@ -12,7 +12,6 @@ return <Layout style={ styles.layout }  >
 
             {  citiesFiltered.length
                 ? citiesFiltered.map( city =>{
-                    console.log("filtered", city )
                     return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
                                 <TouchableOpacity onPress={ ()=> navigation.navigate("City",{ city }) }
                                 style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>

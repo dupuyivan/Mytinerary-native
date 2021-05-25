@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authAction ={
     fetchCountries:()=>{
-        return(dispatch)=>{
+        return()=>{
             return fetch("https://restcountries.eu/rest/v2/all")
             .then( data => data.json() )
             .then( data => data )
@@ -10,7 +10,6 @@ const authAction ={
         }
     },
     submitForm:(endpoint,form)=>{
-        console.log( endpoint,form )
         return( dispatch)=>{
             return fetch("http://mytinerarydupuy.herokuapp.com/api/"+ endpoint, {
                 method:"POST",
