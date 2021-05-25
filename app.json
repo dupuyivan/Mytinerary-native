@@ -4,9 +4,9 @@
     "slug": "myTinerary",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/traveller.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/traveller.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/traveller.png",
         "backgroundColor": "#FFFFFF"
       }
     },

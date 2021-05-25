@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from "react-redux"
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { StyleSheet, ImageBackground } from "react-native"
-import { Drawer, DrawerItem,Button, Layout, Text, IndexPath,Divider, Icon } from '@ui-kitten/components';
+import { StyleSheet, ImageBackground,View } from "react-native"
+import { Drawer, DrawerItem,Button, Layout, Avatar, Text, IndexPath,Divider, Icon } from '@ui-kitten/components';
 import authAction from "../redux/actions/authAction"
 
 import stackHome  from "../navigation/stacks"
@@ -18,20 +18,25 @@ const PersonIcon = (props) => (
   <Icon {...props} name='person-outline'/>
 );
 
-
-Header = (props) => (
-  <React.Fragment>
-    <ImageBackground
-      style={[props.style, styles.header]}
-      source={ propsG.userLogged ? { uri: propsG.userLogged.picture } : require("../assets/user.png")}
-    />
+const Header = (props) => (
+  <Layout style={{height: !propsG.userLogged ? 90: 125 ,marginTop:"7%", justifyContent:"center",alignItems:"center" }}>
     { propsG.userLogged
-        ?<Button onPress={ ()=> propsG.logOut() } style={styles.button} size='small'>LogOut</Button>
-        : null
+
+      ? <View style={{ justifyContent:"space-between",width:"100%" }}>
+          <View style={{ flexDirection:"row",alignItems:"center",justifyContent:"center",marginBottom:"5%" }}>
+            <Avatar size="giant" source={{ uri: propsG.userLogged.picture }} />
+            <Text>{ propsG.userLogged.name + " " + propsG.userLogged.last_name  }</Text>
+          </View>
+          <Button onPress={ ()=> propsG.logOut() } status="danger" appearance='outline' style={{ marginBottom:-15 }} size='small'>LogOut</Button>
+        </View>
+
+      : <Avatar size="giant" source={require("../assets/user.png")} />
     }
     <Divider/>
-  </React.Fragment>
-);
+  </Layout>
+); 
+
+
 
 const DrawerContent = ({ navigation, state }) => (
   <Drawer
@@ -87,12 +92,7 @@ const mapDispatchToProps ={
 export default connect(mapStateToProps,mapDispatchToProps) (AppNavigator)
 
 const styles = StyleSheet.create({
-    header: {
-      height: 128,
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop:"7%"
-    },
+  
   });
 
 

@@ -1,12 +1,12 @@
 import React from "react"
 import { connect } from "react-redux"
 import authAction from "../redux/actions/authAction"
-import { StyleSheet, View,ToastAndroid  } from "react-native"
-import { Layout, Input, Button,Text   } from '@ui-kitten/components';
+import { StyleSheet, View,ToastAndroid,TouchableOpacity  } from "react-native"
+import { Layout, Input, Button,Text ,Icon  } from '@ui-kitten/components';
 
 class SignIn extends React.Component {
 
- state={ form:{ email:"", password:"" } }
+ state={ form:{ email:"", password:"" }, visiblePassword:true }
 
  readForm = (field, value)=>{ this.setState({ ...this.state, form:{ ...this.state.form, [field]:value } }) }
 
@@ -22,18 +22,23 @@ class SignIn extends React.Component {
 
 render(){
     return <Layout style={ styles.mainContainer }>
-                <Text style={ styles.title }>SignIn</Text>
+                <Text style={ styles.title } >SignIn</Text>
                         <View>
-                            <Text style={styles.text} category='s1'>Email</Text>
+                            <Text appearance='hint' category='s1' >Email</Text>
                             <Input onChangeText={ value => this.readForm("email",value)} />
                         </View>
                         <View style={ styles.containers }>
-                            <Text style={styles.text} category='s1'>Password</Text>
-                            <Input onChangeText={ value => this.readForm("password",value)} />
+                            <Text appearance='hint' category='s1'>Password</Text>
+                            <Input
+                            secureTextEntry={ this.state.visiblePassword }
+                            accessoryRight={ ()=> <TouchableOpacity onPress={ ()=> this.setState({...this.state, visiblePassword:!this.state.visiblePassword }) }>
+                            <Icon style={ styles.icon } fill="black" name={ this.state.visiblePassword ? 'eye-off' : 'eye'}/>
+                          </TouchableOpacity> }
+                            onChangeText={ value => this.readForm("password",value)} />
                         </View>
 
-                    <Button style={styles.button} appearance='outline' onPress={ this.submitForm }>
-                        Signin
+                    <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>
+                        SignIn
                     </Button>
         </Layout>
 }
@@ -61,10 +66,14 @@ const styles = StyleSheet.create({
     text: {
         margin: 2,
         fontSize:20,
-        textAlign:"center"
-      },
+    },
     button: {
         margin: 2,
+    },
+    icon:{
+        width: 35,
+        height: 35,
+        marginRight:10
     }
 
 })
