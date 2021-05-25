@@ -8,21 +8,18 @@ const Coment = ({ coment, functions, userLogged })=>{
 const [ visible, setVisible ] = useState(false)
 const [ comment, setcomment ] = useState( coment.comment )
 
-console.log("comment", comment )
 return<View style={ styles.mainContainer }>
             <View style={ styles.comment } >
-
-                { !visible
+                { 
+                    !visible
                     ? <>
                         <Image  source={{ uri: coment.user_id.picture }} style={ styles.imgComent}/>
                         <Text>{ coment.comment }</Text> 
                       </>
-                    
                     : <Input style={ styles.editComent } value={ comment } onChangeText={ v => setcomment( v )  } />
                 }
             </View>
             <View style={ styles.actions }>
-             
                 { 
                      userLogged && coment.user_id._id === userLogged._id && !visible
                         ?   <>
@@ -33,18 +30,14 @@ return<View style={ styles.mainContainer }>
                                     <Icon style={styles.icon} fill='black' name='trash-2-outline' />
                                 </TouchableOpacity>
                             </>
-
                         : userLogged && coment.user_id._id === userLogged._id && visible
                            ? <TouchableOpacity onPress={ ()=>{ functions("update",coment._id,comment  ); setVisible(false) }}>
                                 <Icon style={styles.icon} fill='black' name='arrow-right-outline' />
                             </TouchableOpacity> 
                            : null
                 }
-
             </View>
-            
         </View>
-    
 }
 
 const mapStateToProps = state =>{
@@ -52,7 +45,6 @@ const mapStateToProps = state =>{
         userLogged: state.authReducer.userLogged
     }
 }
-
 
 export default connect(mapStateToProps) (Coment)
 

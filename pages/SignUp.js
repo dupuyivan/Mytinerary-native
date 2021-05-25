@@ -3,15 +3,14 @@ import authAction from "../redux/actions/authAction"
 import { connect } from "react-redux"
 import { Form, TextValidator } from 'react-native-validator-form';
 import { StyleSheet ,ScrollView, View, ToastAndroid } from "react-native"
-import { Layout, Input, Select, SelectItem, IndexPath, Button,Text  } from '@ui-kitten/components';
+import { Layout, Input, Select, SelectItem, Button,Text  } from '@ui-kitten/components';
  
 class SignUp extends React.Component {
 
 
     state={
         countries:[],
-        form:{ name:"",last_name:"",country:"",picture:"",email:"",password:"" },
-        selectedIndex: new IndexPath(0),
+        form:{ name:"",last_name:"",country:"",picture:"",email:"",password:"" }
     }
 
     componentDidMount(){
@@ -29,7 +28,6 @@ class SignUp extends React.Component {
             ? this.props.navigation.navigate("Home") 
             : ToastAndroid.show( data.message , ToastAndroid.SHORT, ToastAndroid.TOP)    
         )}
-
 
 /* ---------------------------------------------------- */
 
@@ -49,9 +47,8 @@ handleSubmit = () => {
 
 render(){
     return <Layout style={ styles.mainContainer }>
-                    <ScrollView >
+        <ScrollView >
             
-
              <Text style={styles.title } category='h1'>SignUp</Text>
 
             <View style={ styles.containers }>
@@ -59,26 +56,24 @@ render(){
                 <Input onChangeText={ value=>{ 
                     /^[a-zA-Z ,.'-]+$/.test( value ) 
                     ?   this.readForm("name",value)
-                    : ToastAndroid.show( "name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
+                    : ToastAndroid.showWithGravity( "name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Last name</Text>
                 <Input onChangeText={ value=>{ 
                     /^[a-zA-Z ,.'-]+$/.test( value ) 
                     ?   this.readForm("last_name",value)
-                    : ToastAndroid.show( "last name is invalid" , ToastAndroid.SHORT)  }} />
+                    : ToastAndroid.showWithGravity( "last name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Country</Text>
-                <Select 
-                        value={ ()=> <Text>{ this.state.countries[ this.state.selectedIndex ]  }</Text> }
-                        selectedIndex={this.state.selectedIndex}
-                        onSelect={index =>{ this.setState({...this.state, selectedIndex: index.row  })
-                        this.readForm("country", this.state.countries[ index.row -1 ]  ) }}>
-                        {   this.state.countries.length
-                            ? this.state.countries.map( country => <SelectItem key={ country } title={ country } /> )
-                            : null
-                        }
+                <Select           
+                    value={ ()=><Text>{ this.state.form.country }</Text> }           
+                    onSelect={index => this.readForm("country", this.state.countries[ index.row ] ) }>
+                    {   this.state.countries.length
+                        ? this.state.countries.map( country => <SelectItem key={ country } title={ country } /> )
+                        : null
+                    }
                     </Select>
             </View>
             <View style={ styles.containers }>
@@ -87,24 +82,27 @@ render(){
             </View>
             <View>
                 <Text style={styles.text} category='s1'>Email</Text>
-                <Input onChangeText={ value=>{ 
+                <Input
+                onChangeText={ value=>{ 
                     /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test( value ) 
                     ?   this.readForm("email",value)
-                    : ToastAndroid.show( "email is invalid" , ToastAndroid.SHORT)  }} />
+                    : ToastAndroid.showWithGravity( "email is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
             <View style={ styles.containers }>
                 <Text style={styles.text} category='s1'>Password</Text>
-                <Input onChangeText={ value=>{ 
+                <Input
+                caption={() => <Text style={ styles.captionText }>must have at least 4 characters and a number </Text>   }
+                onChangeText={ value=>{ 
                     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test( value ) 
                     ?   this.readForm("password",value)
-                    : ToastAndroid.show( "password is invalid" ,ToastAndroid.SHORT)  }} />
+                    : ToastAndroid.showWithGravity( "password is invalid" ,ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
 
             <Button style={styles.button} appearance='outline' onPress={ this.submitForm }>
                 SignUp
                 </Button>
 
-            </ScrollView>
+        </ScrollView>
     </Layout>
 }
 }
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
     text: {
         margin: 2,
         fontSize:20,
-        textAlign:"center",
+        /* textAlign:"center", */
         color:"whitesmoke"
       },
     button: {
@@ -149,5 +147,10 @@ const styles = StyleSheet.create({
         color: 'black',
         paddingRight: 30,
       },
-
+    captionText: {
+        fontSize: 12,
+        fontWeight: "400",
+        /* fontFamily: "opensans-regular", */
+        color: "#8F9BB3",
+      }
 })

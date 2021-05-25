@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
 import { StyleSheet, ScrollView,View , Text, ImageBackground, Image } from "react-native"
-import { Layout ,Divider, Button } from "@ui-kitten/components"
+import { Layout ,Divider, Button, Spinner } from "@ui-kitten/components"
 
 class City extends React.Component {
 
@@ -15,32 +15,38 @@ class City extends React.Component {
 
 render(){
     return <Layout style={ styles.mainContainer }>
-        <ScrollView >
-            <View>
-                <ImageBackground source={{ uri: this.props.route.params.city.img }} style={ styles.cityImg } >
-                    <Text style={ styles.titleCity }>{ this.props.route.params.city.city }</Text>
-                </ImageBackground>
-            </View> 
-            <View style={ styles.contentContainer }>
-                {  
-                    this.state.itineraries.length 
-                    ? this.state.itineraries.map( itinerary =>{
-                          return <View key={ itinerary._id } style={ styles.ItineraryContainer } >
-                                <Text style={ styles.title }>{ itinerary.title }</Text>
-                                     <View style={ styles.author }>
-                                        <Image source={{ uri: itinerary.author.img }} style={ styles.authorImg  } />
-                                        <Text>{ itinerary.author.name } { itinerary.author.last_name } </Text>
-                                        <Divider />
+        {
+            !this.state.itineraries.length
+
+            ? <View style={{ alignItems:"center" }}><Spinner size='large' /></View>
+
+            :   <ScrollView >
+                    <View>
+                        <ImageBackground source={{ uri: this.props.route.params.city.img }} style={ styles.cityImg } >
+                            <Text style={ styles.titleCity }>{ this.props.route.params.city.city }</Text>
+                        </ImageBackground>
+                    </View> 
+                    <View style={ styles.contentContainer }>
+                        {  
+                            this.state.itineraries.length 
+                            ? this.state.itineraries.map( itinerary =>{
+                                return <View key={ itinerary._id } style={ styles.ItineraryContainer } >
+                                        <Text style={ styles.title }>{ itinerary.title }</Text>
+                                            <View style={ styles.author }>
+                                                <Image source={{ uri: itinerary.author.img }} style={ styles.authorImg  } />
+                                                <Text>{ itinerary.author.name } { itinerary.author.last_name } </Text>
+                                                <Divider />
+                                            </View>
+                                        <Button onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } > 
+                                            View more
+                                        </Button>
                                     </View>
-                                <Button onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } > 
-                                    View more
-                                </Button>
-                             </View>
-                    })
-                    : <Text> We don have itineraries for { this.props.route.params.city.city } yet </Text>
-                }
-            </View>
-        </ScrollView>
+                            })
+                            : <Text> We don have itineraries for { this.props.route.params.city.city } yet </Text>
+                        }
+                    </View>
+                </ScrollView>
+        }
     </Layout>
 }
 }
@@ -59,7 +65,8 @@ export default connect(mapStateToProps, mapDispatchStateToprops) (City)
 
 const styles = StyleSheet.create({
     mainContainer:{
-      flex:1
+      flex:1,
+      justifyContent:"center"
     },
     cityImg:{
        width:"100%",

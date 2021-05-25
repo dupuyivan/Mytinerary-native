@@ -2,10 +2,10 @@ import React,{ useState } from "react"
 import Coment from "../components/Comment"
 import { connect } from "react-redux"
 import commentsAction from "../redux/actions/commentsActions"
-import { StyleSheet,ScrollView, View, Text, Image, TouchableOpacity } from "react-native"
+import { StyleSheet,ScrollView, View, Text, Image, TouchableOpacity, ToastAndroid } from "react-native"
 import { Icon ,Input } from "@ui-kitten/components"
 
-const Comments = ({ comments,itineraryId, sendComment,deleteComment,updateComment })=>{
+const Comments = ({ comments,itineraryId, userLogged, sendComment,deleteComment,updateComment })=>{
     const [ localComments ,setLocalComments ] = useState(comments)
     const [ newComment, setNewComment ] = useState("")
 
@@ -23,25 +23,31 @@ const Comments = ({ comments,itineraryId, sendComment,deleteComment,updateCommen
     }
 
 return <View >
-    
         <Text style={ styles.title }>Comments</Text>
         <View>
-        <ScrollView style={ styles.comments }>
-        {   localComments.length
-            ?   localComments.map( coment => <Coment key={ coment._id } coment={ coment } functions={ functions } /> )
-            : null
-        }
-        </ScrollView>
+            <ScrollView >
+            {   localComments && localComments.length
+                ?   localComments.map( coment => <Coment key={ coment._id } coment={ coment } functions={ functions } /> )
+                : null
+            }
+            </ScrollView>
         </View>
         <View style={ styles.comentArea }>
-            <Image source={{ uri:"https://www.famousbirthdays.com/faces/dicaprio-l-image.jpg" }} style={ styles.userImg } />
-            <Input placeholder="Write a comment" style={ styles.cometInput } onChangeText={ v => setNewComment( v ) } />
-            <TouchableOpacity onPress={ () => functions("send") }>
+            <Image source={ !userLogged ? require("../assets/user.png") : { uri: userLogged.picture  }} style={ styles.userImg } />
+            <Input disabled={ userLogged ? false : true } placeholder="Write a comment" style={ styles.cometInput } onChangeText={ v => setNewComment( v ) } />
+            <TouchableOpacity onPress={ () =>{ !userLogged ? ToastAndroid.show( "You must be logued" , ToastAndroid.SHORT) :functions("send") }}>
                 <Icon style={styles.icon} fill='black' name='arrow-right-outline' />
             </TouchableOpacity>  
         </View>
     </View>
 }
+
+const mapStateToProps = state =>{
+    return{
+        userLogged: state.authReducer.userLogged
+    }
+}
+
 
 const mapDispatchToProps ={
     sendComment: commentsAction.sendComment,
@@ -49,7 +55,7 @@ const mapDispatchToProps ={
     updateComment: commentsAction.updateComment
 }
 
-export default connect(null, mapDispatchToProps) (Comments)
+export default connect(mapStateToProps, mapDispatchToProps) (Comments)
 
 const styles = StyleSheet.create({
     title:{
@@ -58,14 +64,11 @@ const styles = StyleSheet.create({
         fontSize:30,
         marginBottom:5
     },
-    comments:{
-        height:"44%",
-        overflow:"scroll"
-    },
     comentArea:{
         flexDirection:"row",
         alignItems:"center",
-        marginTop:5
+        marginTop:5,
+        marginBottom:5,
     },
     userImg:{
         width:50,
@@ -75,11 +78,11 @@ const styles = StyleSheet.create({
     },
     cometInput:{
         width:"75%",
-        paddingLeft:6
+        paddingLeft:6,
     },
     icon:{
-        width: 30,
-        height: 30,
+        width: 35,
+        height: 35,
         marginRight:10
     },
 })

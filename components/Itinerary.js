@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
 import commentsAction from "../redux/actions/commentsActions"
 import Comments from "../components/Comments"
-import { StyleSheet, View, TouchableOpacity } from "react-native"
+import { StyleSheet, View, TouchableOpacity, ScrollView,ToastAndroid } from "react-native"
 import { Text, Layout, Avatar, Icon,  } from "@ui-kitten/components"
 import { SliderBox } from "react-native-image-slider-box";
 import { Rating } from 'react-native-ratings';
@@ -25,7 +25,7 @@ const Itinerary = ({ route:{ params: itinerary }, fetchActivities, navigation, u
     useEffect(()=>{
         if( userLogged && state.likes.includes( userLogged._id ) ){ setState({ ...state, liked:true }) }
         else{ setState({ ...state, liked:false }) }
-    },[ state.likes, itinerary.itinerary,userLogged ])
+    },[ state.likes, state.liked, itinerary.itinerary,userLogged ])
 
     const Like_Unlike = async ()=>{   
         if(userLogged){ 
@@ -39,8 +39,8 @@ const Itinerary = ({ route:{ params: itinerary }, fetchActivities, navigation, u
         }
     }
 
-
 return <Layout style={ styles.mainContainer }>
+        <ScrollView style={ styles.mainContainer } >
             <Text style={ styles.ItineraryTitle } category='h1'>{ itinerary.itinerary.title }</Text>
 
             <View style={ styles.firstContainer }>
@@ -79,12 +79,14 @@ return <Layout style={ styles.mainContainer }>
                     
                     <View style={{ flexDirection:"row" }}>
                         <Text style={{ textAlign:"center" }}>Like </Text>
-                        <TouchableOpacity onPress={ Like_Unlike }>
+                        <TouchableOpacity onPress={ ()=>{ 
+                            !userLogged ? ToastAndroid.showWithGravity("You must be logged",ToastAndroid.SHORT,ToastAndroid.CENTER)  : Like_Unlike }}>
                             <Icon style={styles.icon} fill={ state.liked ? "red" : "grey" } name='heart' />
                         </TouchableOpacity>
                         <Text>{ state.likes.length }</Text>
                     </View> 
                 </View>
+
             </View>
 
             <View> 
@@ -97,6 +99,7 @@ return <Layout style={ styles.mainContainer }>
             <View >
                 <Comments comments={ itinerary.itinerary.comments } itineraryId={ itinerary.itinerary._id  } />
             </View>
+        </ScrollView>
     </Layout>
 }
 
@@ -116,7 +119,7 @@ export default connect(mapStateToProps, mapDispatchToProps) (Itinerary)
 const styles = StyleSheet.create({
     mainContainer:{
         flex:1,
-        paddingBottom:200
+        /* paddingBottom:200 */
     },
     ItineraryTitle:{
         color: "white",
