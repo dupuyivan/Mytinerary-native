@@ -43,7 +43,7 @@ const stackHome = ({ search }) => {
     <Layout style={styles.container} level='1'>
       <TopNavigation
       accessoryLeft={ () => renderBackAction(navigation,"Cities")  }
-        accessoryRight={ ()=> <TopNavigationAction icon={ () => <Input style={ styles.searchInput } onChangeText={ search } /> }  />  }
+        accessoryRight={ ()=> <TopNavigationAction icon={ () => <Input style={ styles.searchInput } placeholder="Search a city" onChangeText={ search } /> }  />  }
       />
       <Search navigation={ navigation } />
     </Layout>

@@ -4,7 +4,7 @@ import citiesAction from "../redux/actions/citiesAction"
 import commentsAction from "../redux/actions/commentsActions"
 import Comments from "../components/Comments"
 import { StyleSheet, View, TouchableOpacity, ScrollView,ToastAndroid } from "react-native"
-import { Text, Layout, Avatar, Icon, Tooltip  } from "@ui-kitten/components"
+import { Text, Layout, Avatar, Icon, Tooltip,Button  } from "@ui-kitten/components"
 import { SliderBox } from "react-native-image-slider-box";
 import { Rating } from 'react-native-ratings';
 
@@ -45,7 +45,7 @@ return <Layout style={ styles.mainContainer }>
         <ScrollView style={ styles.mainContainer } >
             <Text style={ styles.title } category='h1'>{ itinerary.itinerary.title }</Text>
 
-            <View /* style={ styles.firstContainer } */ style={{ flexDirection:"row", alignItems:"center" }} >
+            <View style={{ flexDirection:"row", alignItems:"center" }} >
 
                 <View style={{ flexDirection:"row",alignItems:"center" }}>
                     <Avatar size="giant" source={{ uri: itinerary.itinerary.author.img  }} />
@@ -57,12 +57,11 @@ return <Layout style={ styles.mainContainer }>
 
                 <View style={{ marginLeft:"5%" }}>
                     <Tooltip
-                        anchor={ ()=><TouchableOpacity onPress={()=>setState({ ...state, visibleTooltip:true  })} ><Text>Details</Text></TouchableOpacity>  }
+                        anchor={ ()=><Button  appearance='ghost' onPress={()=>setState({ ...state, visibleTooltip:true  })} >Details</Button>  }
                         visible={ state.visibleTooltip }
                         onBackdropPress={()=> setState({ ...state, visibleTooltip:false })  }>
                        
                        <View style={{ alignItems:"center",justifyContent:"center" }}>
-                            <View>
                                 <Text style={{ textAlign:"center",color:"black" }}>Price</Text>
                                 <Rating
                                     type='custom'
@@ -72,10 +71,7 @@ return <Layout style={ styles.mainContainer }>
                                     ratingCount={ itinerary.itinerary.price }
                                     imageSize={25}
                                     />
-                            </View>
-
-                            <View style={{alignSelf:"center",justifyContent:"center" }} >
-
+                            <View style={{ alignSelf:"center",justifyContent:"center" }} >
                                 <Text style={{ textAlign:"center", color:"black" }}>duration</Text>
                                 <Rating
                                     type='custom'
@@ -86,21 +82,26 @@ return <Layout style={ styles.mainContainer }>
                                     imageSize={25}
                                     />
                             </View>
-
-                            <View  >
-                                <Text style={{ color:"black" }}>Hashtags:</Text>
+                            <View style={{ alignItems:"center",justifyContent:"center" }} >
+                                <Text style={{ color:"black" }}>Hashtags</Text>
                                 { itinerary.itinerary.hashstags.map( hashtag =>{ 
-                                return <Text style={{ color:"black" }}>#{ hashtag }</Text>  }) }
+                                return <Text key={ hashtag } style={{ color:"black",textAlign:"center" }}>#{ hashtag }</Text>  }) }
                             </View >
                        </View>
-                    
                     </Tooltip>
                 </View>
 
+                <View style={{ flexDirection:"row" , alignItems:"center", marginLeft:"2%" }}>
+                    <Text style={{ textAlign:"center" }}>Likes </Text>
+                    <TouchableOpacity onPress={ Like_Unlike }>
+                        <Icon style={styles.icon} fill={ state.liked ? "red" : "grey" } name='heart' />
+                    </TouchableOpacity>
+                        <Text style={{ marginLeft:2 }}>{ state.likes.length ? state.likes.length : null }</Text>
+                </View>                      
             </View>
 
             <View> 
-                <Text /* style={ styles.activities } */ style={{ textAlign:"center" }} category='h1'>Activities</Text>
+                <Text style={{ textAlign:"center" }} category='h1'>Activities</Text>
                 {   activities.length
                     ? <SliderBox autoplay={ true } sliderBoxHeight={145} images={ activities } />
                     : null
@@ -133,127 +134,8 @@ const styles = StyleSheet.create({
     title:{
         textAlign:"center"
     },
-})
-
-
-{/*    original
-                <View style={ styles.author }>
-                    <Avatar style={styles.avatar} size='giant' source={{ uri: itinerary.itinerary.author.img }} />
-                    <View style={ styles.names }>
-                        <Text>{ itinerary.itinerary.author.name }</Text>
-                        <Text>{ itinerary.itinerary.author.last_name }</Text>
-                    </View>
-                </View>
-                <View style={ styles.info }>
-                    
-                    <View>
-                        <Text style={{ textAlign:"center" }}>Price</Text>
-                        <Rating
-                            type='custom'
-                            ratingImage={ require("../assets/money.png") }
-                            ratingColor='transparent'
-                            ratingBackgroundColor='transparent'
-                            ratingCount={ itinerary.itinerary.price }
-                            imageSize={25}
-                            />
-                    </View>
-                    <View style={{ marginRight:60 }} >
-                        <Text style={{ textAlign:"center" }}>duration</Text>
-                        <Rating
-                            type='custom'
-                            ratingImage={ require("../assets/clock.png") }
-                            ratingColor='transparent'
-                            ratingBackgroundColor='transparent'
-                            ratingCount={ itinerary.itinerary.duration }
-                            imageSize={25}
-                            />
-                    </View>
-                    
-                    <View style={{ flexDirection:"row" }}>
-                        <Text style={{ textAlign:"center" }}>Like </Text>
-                        <TouchableOpacity onPress={ Like_Unlike }>
-                            <Icon style={styles.icon} fill={ state.liked ? "red" : "grey" } name='heart' />
-                        </TouchableOpacity>
-                        <Text>{ state.likes.length }</Text>
-                    </View> 
-                </View> 
-            
-            
-            const styles = StyleSheet.create({
-    mainContainer:{
-        flex:1,
-    },
-    ItineraryTitle:{
-        color: "white",
-        textAlign:"center",
-    },
-    firstContainer:{
-        marginBottom:5
-    },
-    author:{
-        alignSelf:"center"
-    },
-    avatar:{
-        alignSelf:"center"
-    },
-    names:{
-        width:"45%",
-        flexDirection:"row",
-        justifyContent:"space-around"
-    },
-    info:{
-        flexDirection:"row",
-        justifyContent:"space-between"
-    },
-    activities:{
-        textAlign:"center",
-        fontSize:30,
-        marginBottom:5
-    },
     icon:{
         width: 35,
         height: 35,
     }
-})        
-*/   }
-
-
-/* second Option
-<View style={{ flexDirection:"row",alignItems:"center" }}>
-
-                    <Avatar size="giant" source={{ uri: itinerary.itinerary.author.img  }} />
-                    <View style={{ marginLeft:"5%" }}>
-                        <Text style={{ marginLeft:5 }} >{ itinerary.itinerary.author.name }</Text>
-                        <Text style={{ marginLeft:5 }}>{ itinerary.itinerary.author.last_name }</Text>
-                    </View>
-                </View>
-
-                <View >
-                    <View style={{ flexDirection:"row" }}>
-                        <Text style={{ marginRight:5 }}>Price: </Text>
-                        <Rating
-                                type='custom'
-                                ratingImage={ require("../assets/money.png") }
-                                ratingColor='transparent'
-                                ratingBackgroundColor='transparent'
-                                ratingCount={ itinerary.itinerary.price }
-                                imageSize={22}
-                                />
-                        </View>
-                    <View style={{ flexDirection:"row" }}>
-                        <Text style={{ marginRight:5 }}>Duration: </Text>
-                        <Rating
-                            type='custom'
-                            ratingImage={ require("../assets/clock.png") }
-                            ratingColor='transparent'
-                            ratingBackgroundColor='transparent'
-                            ratingCount={ itinerary.itinerary.duration }
-                            imageSize={22}
-                            />
-                    </View>
-                    <View style={{ flexDirection:"row", flexWrap:"wrap" }} >
-                        <Text>Hashtags: </Text>
-                        { itinerary.itinerary.hashstags.map( hashtag => <Text>#{ hashtag }</Text>  ) }
-                    </View >
-                   
-</View> */
+})

@@ -34,7 +34,7 @@ render(){
                                         <Text style={ styles.title }>{ itinerary.title }</Text>
                                             <View style={ styles.author }>
                                                 <Image source={{ uri: itinerary.author.img }} style={ styles.authorImg  } />
-                                                <Text style={{ marginLeft:20 }}>{ itinerary.author.name } { itinerary.author.last_name } </Text>
+                                                <Text style={ styles.authorName }>{ itinerary.author.name } { itinerary.author.last_name } </Text>
                                                 <Divider />
                                             </View>
                                         <Button onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } > 
@@ -98,5 +98,9 @@ const styles = StyleSheet.create({
         height:65,
         borderRadius:50
     },
+    authorName:{
+        marginLeft:"2%",
+        fontSize:20
+    }
 
 })
