@@ -11,17 +11,18 @@ const Comments = ({ comments,itineraryId, userLogged, sendComment,deleteComment,
 
     const functions = (type,idComment, updatedComment )=>{
         if( type === "send" ){ 
-            sendComment(itineraryId, newComment ).then( res => setLocalComments( res ) )
+            if( !newComment.length ){ return null }
+            setNewComment("")   
+            sendComment(userLogged.token, itineraryId, newComment ).then( res => setLocalComments( res ) )
         }
         else if( type === "delete" ){ 
-            deleteComment(itineraryId, idComment ).then( res => setLocalComments( res ) )
+            deleteComment( userLogged.token,itineraryId, idComment ).then( res => setLocalComments( res ) )
         }
         else{
-            updateComment( itineraryId,idComment, updatedComment )
+            updateComment(userLogged.token, itineraryId,idComment, updatedComment )
             .then( res => setLocalComments( res ) )
         }
     }
-
 return <View >
         <Text style={ styles.title }>Comments</Text>
         <View>
@@ -34,7 +35,7 @@ return <View >
         </View>
         <View style={ styles.comentArea }>
             <Image source={ !userLogged ? require("../assets/user.png") : { uri: userLogged.picture  }} style={ styles.userImg } />
-            <Input disabled={ userLogged ? false : true } placeholder="Write a comment" style={ styles.cometInput } onChangeText={ v => setNewComment( v ) } />
+            <Input disabled={ userLogged ? false : true } placeholder="Write a comment" value={ newComment } style={ styles.cometInput } onChangeText={ v => setNewComment( v ) } />
             <TouchableOpacity onPress={ () =>{ !userLogged ? ToastAndroid.show( "You must be logued" , ToastAndroid.SHORT) :functions("send") }}>
                 <Icon style={styles.icon} fill='black' name='arrow-right-outline' />
             </TouchableOpacity>  

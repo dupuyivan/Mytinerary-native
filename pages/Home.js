@@ -1,14 +1,12 @@
 import React from "react"
 import Carousel from "../components/Carousel"
-import { StyleSheet,View, Text, ImageBackground, Image, ScrollView } from 'react-native';
-import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
+import { StyleSheet,View, Text, ImageBackground, Image, ScrollView, TouchableWithoutFeedback } from 'react-native';
 
 
 class Home extends React.Component {
 
 render(){
-return <>
-          <ImageBackground source={ require("../assets/eiffel-tower.jpg") } style={ styles.backgound  }>
+return  <ImageBackground source={ require("../assets/eiffel-tower.jpg") } style={ styles.backgound  }>
           <ScrollView>
             <View style={ styles.container }>
               
@@ -19,18 +17,19 @@ return <>
 
               <View style={ styles.textoYboton }>
                   <Text style={ styles.findyour } >Find your perfect trip , designed by insiders who knows and love their cities!</Text>
-                  <View style={ styles.letsContainer } >
-                    <Text onPress={ ()=> this.props.navigation.navigate("Cities") }  style={ styles.letsButton } >Let's begin</Text>
-                    
-                  </View>
+                  <TouchableWithoutFeedback onPress={ ()=> this.props.navigation.navigate("Cities") }>
+                    <View style={ styles.letsContainer } >
+                      <Text style={ styles.letsButton } >Let's begin</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                  
               </View>
 
                 <Text style={ styles.title }>Popular Mytineraries</Text>
                   <Carousel />
             </View>
           </ScrollView>
-          </ImageBackground>
-    </>
+        </ImageBackground>
 }
 }
 
@@ -38,12 +37,11 @@ export default Home
 
 
 
-
 const styles = StyleSheet.create({
-    backgound:{
-      width: "100%",
-      flex: 1,
-      resizeMode: "cover",
+  backgound:{
+    width: "100%",
+    flex: 1,
+    resizeMode: "cover",
     },
     container: {
       marginTop:"45%"

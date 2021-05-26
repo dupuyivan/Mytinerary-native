@@ -26,11 +26,14 @@ render(){
                 <Text style={ styles.title } >SignIn</Text>
                         <View>
                             <Text appearance='hint' category='s1' >Email</Text>
-                            <Input onChangeText={ value => this.readForm("email",value)} />
+                            <Input 
+                            autoCapitalize="none"
+                            onChangeText={ value => this.readForm("email",value)} />
                         </View>
                         <View style={ styles.containers }>
                             <Text appearance='hint' category='s1'>Password</Text>
                             <Input
+                            autoCapitalize="none"
                             secureTextEntry={ this.state.visiblePassword }
                             accessoryRight={ ()=> <TouchableOpacity onPress={ ()=> this.setState({...this.state, visiblePassword:!this.state.visiblePassword }) }>
                             <Icon style={ styles.icon } fill="black" name={ this.state.visiblePassword ? 'eye-off' : 'eye'}/>

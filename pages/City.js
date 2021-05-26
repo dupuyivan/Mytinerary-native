@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import citiesAction from "../redux/actions/citiesAction"
 import { StyleSheet, ScrollView,View , Text, ImageBackground, Image } from "react-native"
-import { Layout ,Divider, Button, Spinner } from "@ui-kitten/components"
+import { Layout ,Divider, Button, } from "@ui-kitten/components"
 
 class City extends React.Component {
 
@@ -18,7 +18,10 @@ render(){
         {
             !this.state.itineraries.length
 
-            ? <View style={{ alignItems:"center" }}><Spinner size='large' /></View>
+            ? <View style={{ alignItems:"center" }}>
+                <Text style={ styles.message }>Sorry, we do not have itineraries for { this.props.route.params.city.city }.Keep looking</Text>
+                <Button status='danger' onPress={()=> this.props.navigation.navigate("Cities") } >Back to cities</Button>
+                </View>
 
             :   <ScrollView >
                     <View>
@@ -42,7 +45,7 @@ render(){
                                         </Button>
                                     </View>
                             })
-                            : <Text> We don have itineraries for { this.props.route.params.city.city } yet </Text>
+                            : null
                         }
                     </View>
                 </ScrollView>
@@ -101,6 +104,14 @@ const styles = StyleSheet.create({
     authorName:{
         marginLeft:"2%",
         fontSize:20
+    },
+    message:{
+        width: "85%",
+        backgroundColor:"#FBF378",
+        fontSize:20,
+        borderRadius:8,
+        padding:2,
+        marginBottom:4
     }
 
 })

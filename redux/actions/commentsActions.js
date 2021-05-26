@@ -1,10 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let token = ""
-AsyncStorage.getItem("token").then( data => token = data )
 
 const commentsAction ={
-    sendComment:(idItinerary, comment )=>{
+    sendComment:(token, idItinerary, comment )=>{
         return () =>{
            return fetch("http://mytinerarydupuy.herokuapp.com/api/comentary/"+ idItinerary ,{  
         method:"POST",
@@ -18,7 +16,7 @@ const commentsAction ={
         .catch( err => console.log( err ) )
         }
     },
-    deleteComment:(idItinerary,idComent)=>{
+    deleteComment:(token, idItinerary,idComent)=>{
         return()=>{
         return fetch("http://mytinerarydupuy.herokuapp.com/api/comentary/" + idItinerary + "/" + idComent,{
             method:"DELETE",
@@ -29,7 +27,7 @@ const commentsAction ={
         .catch( err => console.log( err ) )   
         }
     },
-    updateComment:(idItinerary,idComent, comment)=>{
+    updateComment:(token, idItinerary,idComent, comment)=>{
         return()=>{
         return fetch("http://mytinerarydupuy.herokuapp.com/api/comentary/"+ idItinerary + "/" + idComent,{
             method:"PUT",
@@ -44,7 +42,7 @@ const commentsAction ={
         .catch( err => console.log( err ) )
         }
     },
-    like_unlike:( id_Itinerary )=>{
+    like_unlike:(token, id_Itinerary )=>{
         return ()=>{
           return fetch("https://mytinerarydupuy.herokuapp.com/api/like/" + id_Itinerary ,{ 
                 method:"POST",

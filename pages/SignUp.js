@@ -24,7 +24,10 @@ class SignUp extends React.Component {
     readForm =( input, value )=>{ this.setState({ ...this.state,form:{ ...this.state.form, [input]:value }}) }
       
     submitForm =()=>{
-        if(!this.state.form.password.length ){ return null }
+        if( !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test( this.state.form.email ) ){
+            return ToastAndroid.showWithGravity( "email is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER) }
+        if(  ! /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test( this.state.form.password )  )
+        { return ToastAndroid.showWithGravity( "password is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER) }
         this.props.submitForm( "signup", this.state.form )
         .then( data => data.success
         ? this.props.navigation.navigate("Home") 
@@ -32,20 +35,6 @@ class SignUp extends React.Component {
     )}
 
 /* ---------------------------------------------------- */
-
-
-handleChange = (email) => {
-    this.setState({ email });
-}
-
-submit = () => {
-    // your submit logic
-}
-
-handleSubmit = () => {
-    this.refs.form.submit();
-}
-
 
 render(){
     return <Layout style={ styles.mainContainer }>
@@ -83,29 +72,26 @@ render(){
                 <Text appearance='hint' category='s1'>Picture</Text>
                 <Input onChangeText={ value=>this.readForm("picture",value) } />
             </View>
+           
             <View>
                 <Text appearance='hint' category='s1'>Email</Text>
-                <Input
-                onChangeText={ value=>{ 
-                    /^[\w-\.]+@([\w-]+\.)+[\w-]$/.test( value ) 
-                    ?   this.readForm("email",value)
-                    : ToastAndroid.showWithGravity( "email is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
+                    <Input
+                    autoCapitalize="none"
+                    onChangeText={ value=> this.readForm("email",value) } />
             </View>
+
             <View style={ styles.containers }>
                 <Text appearance='hint' category='s1'>Password</Text>
-                <Input
+                <Input 
+                autoCapitalize="none"
                 secureTextEntry={ this.state.visiblePassword }
                 accessoryRight={ ()=> <TouchableOpacity onPress={ ()=> this.setState({...this.state, visiblePassword:!this.state.visiblePassword }) }>
                     <Icon style={ styles.icon } fill="black" name={ this.state.visiblePassword ? 'eye-off' : 'eye'}/>
                 </TouchableOpacity> }
                 caption={() => <Text style={ styles.captionText }>Must have at least 4 characters and a number </Text>   }
-                onChangeText={ value=>{ 
-                    /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test( value ) 
-                    ?   this.readForm("password",value)
-                    : ToastAndroid.showWithGravity( "password is invalid" ,ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
+                onChangeText={ value=> this.readForm("password",value) } />
             </View>
 
-            
             <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>SignUp </Button>
             
             <View style={{ flexDirection:"row", alignItems:"center" }}>

@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         marginRight:10
     },
     icon:{
-        width: 20,
-        height: 20,
+        width: 22,
+        height: 22,
         marginRight:10
     },
     actions:{

@@ -35,7 +35,7 @@ const Itinerary = ({ route:{ params: itinerary }, fetchActivities, navigation, u
             : setState({ ...state,likes: [...state.likes,userLogged._id] }) 
     
             if( !state.send ){
-                setState({ ...state, likes: await like_unlike( itinerary.itinerary._id ),send:true })
+                setState({ ...state, likes: await like_unlike( userLogged.token ,itinerary.itinerary._id ),send:true })
             }
 
         }else{ ToastAndroid.showWithGravity("You must be logged",ToastAndroid.SHORT,ToastAndroid.CENTER) }
