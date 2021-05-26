@@ -29,12 +29,12 @@ render(){
                     <View style={ styles.contentContainer }>
                         {  
                             this.state.itineraries.length 
-                            ? this.state.itineraries.map( itinerary =>{
-                                return <View key={ itinerary._id } style={ styles.ItineraryContainer } >
+                            ? this.state.itineraries.map(( itinerary, i) =>{
+                                return <View key={ i } style={ styles.ItineraryContainer } >
                                         <Text style={ styles.title }>{ itinerary.title }</Text>
                                             <View style={ styles.author }>
                                                 <Image source={{ uri: itinerary.author.img }} style={ styles.authorImg  } />
-                                                <Text>{ itinerary.author.name } { itinerary.author.last_name } </Text>
+                                                <Text style={{ marginLeft:20 }}>{ itinerary.author.name } { itinerary.author.last_name } </Text>
                                                 <Divider />
                                             </View>
                                         <Button onPress={ ()=> this.props.navigation.navigate("Itinerary",{ itinerary }) } > 

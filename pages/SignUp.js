@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import { Form, TextValidator } from 'react-native-validator-form';
 import { StyleSheet ,ScrollView, View, ToastAndroid, TouchableOpacity } from "react-native"
 import { Layout, Input, Select, SelectItem, Button,Text, Icon  } from '@ui-kitten/components';
+import LoginScreen from "../components/BotonGoogle";
  
 class SignUp extends React.Component {
 
@@ -26,9 +27,9 @@ class SignUp extends React.Component {
         if(!this.state.form.password.length ){ return null }
         this.props.submitForm( "signup", this.state.form )
         .then( data => data.success
-            ? this.props.navigation.navigate("Home") 
-            : ToastAndroid.showWithGravity( "Some fields are wrong" , ToastAndroid.SHORT, ToastAndroid.CENTER)    
-        )}
+        ? this.props.navigation.navigate("Home") 
+        : ToastAndroid.showWithGravity( "Some fields are wrong" , ToastAndroid.SHORT, ToastAndroid.CENTER )    
+    )}
 
 /* ---------------------------------------------------- */
 
@@ -104,9 +105,16 @@ render(){
                     : ToastAndroid.showWithGravity( "password is invalid" ,ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
             </View>
 
-            <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>
-                SignUp
-                </Button>
+            
+            <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>SignUp </Button>
+            
+            <View style={{ flexDirection:"row", alignItems:"center" }}>
+                <Text>Already have an account?</Text>
+                <Button onPress={()=> this.props.navigation.navigate("SignIn") } 
+                status="success" appearance='ghost'>SignIn</Button>
+            </View>
+            
+            <LoginScreen text={ "SignUp with Google" } endpoint={ "signup" } navigation={ this.props.navigation } />
 
         </ScrollView>
     </Layout>

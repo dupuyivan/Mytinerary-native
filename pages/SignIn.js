@@ -1,6 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import authAction from "../redux/actions/authAction"
+import LoginScreen from "../components/BotonGoogle"
 import { StyleSheet, View,ToastAndroid,TouchableOpacity  } from "react-native"
 import { Layout, Input, Button,Text ,Icon  } from '@ui-kitten/components';
 
@@ -37,9 +38,15 @@ render(){
                             onChangeText={ value => this.readForm("password",value)} />
                         </View>
 
-                    <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>
-                        SignIn
-                    </Button>
+                    <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>SignIn</Button>
+                    
+                    <View style={{ flexDirection:"row", alignItems:"center" }}>
+                        <Text>Don't have an account?</Text>
+                        <Button onPress={()=> this.props.navigation.navigate("SignUp") } 
+                        status="success" appearance='ghost'>SignUp</Button>
+                    </View>
+
+                <LoginScreen text={ "SignIn with Google" } endpoint={ "signin" } navigation={ this.props.navigation } />
         </Layout>
 }
 }

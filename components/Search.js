@@ -21,9 +21,9 @@ return <Layout style={ styles.layout }  >
                     })
                 : value.length && !citiesFiltered.length
                     ? <View>
-                        <Text>No results</Text>
+                        <Text style={ styles.messages }>No results</Text>
                     </View> 
-                    : <Text>Search something</Text>
+                    : <Text style={ styles.messages }>Search something</Text>
             }
         </ScrollView>
     </Layout>
@@ -58,6 +58,10 @@ const styles = StyleSheet.create({
     cardText:{
         fontSize:40,
         color:"white"
+    },
+    messages:{
+        textAlign:"center",
+        marginTop:"2%"
     }
 })
 
