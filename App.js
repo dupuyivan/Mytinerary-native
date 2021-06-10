@@ -5,20 +5,31 @@ import { applyMiddleware, createStore } from "redux"
 import reduxThunk from "redux-thunk"
 import { Provider } from "react-redux"
 import mainReducer from "./redux/reducers/mainReducer"
-import { NavigationContainer } from '@react-navigation/native';
 
-import DrawStack from "./navigation/drawNavigator"
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, Layout, Text, IconRegistry } from '@ui-kitten/components';
+import { default as theme } from './custom-theme.json';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
+
+
+import DrawerNavigator from "./navigation/drawNavigator"
 
 const store = createStore( mainReducer, applyMiddleware( reduxThunk )  )
 
 export default function App() {
 
-  return (
+  return ( <>
     <Provider store={ store } >
-      <NavigationContainer >
-        <DrawStack />
-      </NavigationContainer >
+      
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+      <StatusBar />
+        <DrawerNavigator />
+      </ApplicationProvider>
+
     </Provider>
+    </>
   );
 }
 

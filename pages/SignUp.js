@@ -1,71 +1,109 @@
 import React from "react"
 import authAction from "../redux/actions/authAction"
 import { connect } from "react-redux"
-import RNPickerSelect from 'react-native-picker-select'
-import { StyleSheet ,ScrollView, View , Text, TextInput, TouchableOpacity } from "react-native"
-
+import { Form, TextValidator } from 'react-native-validator-form';
+import { StyleSheet ,ScrollView, View, ToastAndroid, TouchableOpacity } from "react-native"
+import { Layout, Input, Select, SelectItem, Button,Text, Icon  } from '@ui-kitten/components';
+import LoginScreen from "../components/BotonGoogle";
+ 
 class SignUp extends React.Component {
+
 
     state={
         countries:[],
         form:{ name:"",last_name:"",country:"",picture:"",email:"",password:"" },
+        visiblePassword:true
     }
 
     componentDidMount(){
      this.props.fetchCountries()
      .then( data => this.setState({ ...this.state, 
-        countries: data.map( element =>({ label: element.name, value:element.name  }) ) }) )
+        countries: data.map( element => element.name ) }) )
     }
 
     readForm =( input, value )=>{ this.setState({ ...this.state,form:{ ...this.state.form, [input]:value }}) }
       
     submitForm =()=>{
+        if( !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test( this.state.form.email ) ){
+            return ToastAndroid.showWithGravity( "email is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER) }
+        if(  ! /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/.test( this.state.form.password )  )
+        { return ToastAndroid.showWithGravity( "password is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER) }
         this.props.submitForm( "signup", this.state.form )
-        .then( data => data.success && this.props.navigation.navigate("Home") )
-    }
+        .then( data => data.success
+        ? this.props.navigation.navigate("Home") 
+        : ToastAndroid.showWithGravity( "Some fields are wrong" , ToastAndroid.SHORT, ToastAndroid.CENTER )    
+    )}
 
+/* ---------------------------------------------------- */
 
 render(){
-    return <ScrollView style={ styles.mainContainer }>
-             <Text style={ styles.title }>SignUp</Text>
+    return <Layout style={ styles.mainContainer }>
+        <ScrollView >
+            
+             <Text style={styles.title } category='h1'>SignUp</Text>
 
-             <View style={ styles.placeHolders }>
-                 <Text style={ styles.placeholder }>First Name</Text>
-                 <TextInput onChangeText={( value => this.readForm("name",value) )  } style={ styles.input } />
-             </View>
-             <View style={ styles.placeHolders }>
-             <Text style={ styles.placeholder }>Last name</Text>
-                 <TextInput onChangeText={( value => this.readForm("last_name",value) )  } style={ styles.input } />
-             </View>
-             <View style={ styles.placeHolders }>
-             <Text style={ styles.placeholder }>Country</Text>
-             
-                <RNPickerSelect
-                placeholder={{ label:"Select a your country", value:"" }}
-                items={this.state.countries}
-                onValueChange={ value => this.readForm("country", value ) }
-                style={ styles }
-                />
+            <View style={ styles.containers }>
+                <Text appearance='hint' category='s1'>First name</Text>
+                <Input
+                 onChangeText={ value=>{ 
+                    /^[a-zA-Z ,.'-]+$/.test( value ) 
+                    ?   this.readForm("name",value)
+                    : ToastAndroid.showWithGravity( "name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
+            </View>
+            <View style={ styles.containers }>
+                <Text appearance='hint' category='s1'>Last name</Text>
+                <Input onChangeText={ value=>{ 
+                    /^[a-zA-Z ,.'-]+$/.test( value ) 
+                    ?   this.readForm("last_name",value)
+                    : ToastAndroid.showWithGravity( "last name is invalid" , ToastAndroid.SHORT, ToastAndroid.CENTER)  }} />
+            </View>
+            <View style={ styles.containers }>
+                <Text appearance='hint' category='s1'>Country</Text>
+                <Select           
+                    value={ ()=><Text>{ this.state.form.country }</Text> }           
+                    onSelect={index => this.readForm("country", this.state.countries[ index.row ] ) }>
+                    {   this.state.countries.length
+                        ? this.state.countries.map( country => <SelectItem key={ country } title={ country } /> )
+                        : null
+                    }
+                    </Select>
+            </View>
+            <View style={ styles.containers }>
+                <Text appearance='hint' category='s1'>Picture</Text>
+                <Input onChangeText={ value=>this.readForm("picture",value) } />
+            </View>
+           
+            <View>
+                <Text appearance='hint' category='s1'>Email</Text>
+                    <Input
+                    autoCapitalize="none"
+                    onChangeText={ value=> this.readForm("email",value) } />
+            </View>
 
-             </View>
-             <View style={ styles.placeHolders }>
-             <Text style={ styles.placeholder }>Picture</Text>
-                 <TextInput onChangeText={( value => this.readForm("picture",value ) )} style={ styles.input } />
-             </View>
-             <View style={ styles.placeHolders }>
-             <Text style={ styles.placeholder }>Email</Text>
-                 <TextInput onChangeText={( value => this.readForm("email",value ) )} style={ styles.input } />
-             </View>
-             <View style={ styles.placeHolders } >
-             <Text style={ styles.placeholder }>Password</Text>
-                 <TextInput onChangeText={( value => this.readForm("password",value ) )} style={ styles.input } />
-             </View>
-             <View style={ styles.placeHolders }>
-                <TouchableOpacity style={ styles.buttonContainer } >
-                    <Text onPress={ this.submitForm } style={ styles.send }>SignUp</Text>
-                </TouchableOpacity>
-             </View>
-    </ScrollView>
+            <View style={ styles.containers }>
+                <Text appearance='hint' category='s1'>Password</Text>
+                <Input 
+                autoCapitalize="none"
+                secureTextEntry={ this.state.visiblePassword }
+                accessoryRight={ ()=> <TouchableOpacity onPress={ ()=> this.setState({...this.state, visiblePassword:!this.state.visiblePassword }) }>
+                    <Icon style={ styles.icon } fill="black" name={ this.state.visiblePassword ? 'eye-off' : 'eye'}/>
+                </TouchableOpacity> }
+                caption={() => <Text style={ styles.captionText }>Must have at least 4 characters and a number </Text>   }
+                onChangeText={ value=> this.readForm("password",value) } />
+            </View>
+
+            <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>SignUp </Button>
+            
+            <View style={{ flexDirection:"row", alignItems:"center" }}>
+                <Text>Already have an account?</Text>
+                <Button onPress={()=> this.props.navigation.navigate("SignIn") } 
+                status="success" appearance='ghost'>SignIn</Button>
+            </View>
+            
+            <LoginScreen text={ "SignUp with Google" } endpoint={ "signup" } navigation={ this.props.navigation } />
+
+        </ScrollView>
+    </Layout>
 }
 }
 
@@ -79,39 +117,24 @@ export default connect(null,mapDisptatchToProps) (SignUp)
 const styles = StyleSheet.create({
     mainContainer:{
         marginTop:"6%",
-        flex:1 
+        flex:1,
     },
-    title:{
-        fontSize:40,
+    title:{ 
         textAlign:"center",
-        marginTop:10,
+        fontSize:30,
         marginBottom:20
     },
-    placeHolders:{
-        alignItems:"center",
-        marginBottom:20
+    containers:{
+        marginBottom:"4%"
     },
-    placeholder:{
-        fontSize: 20
-    },
-    input:{
-        borderStyle:"solid",
-        borderColor:"black",
-        width:"75%",
-        backgroundColor:"black",
-        borderRadius:10,
-        backgroundColor:"#D7E3EE",
-        paddingLeft:4
-    },
-    buttonContainer:{
-        width:"60%",
-        textAlign:"center",
-        backgroundColor:"#379BF3",
-        padding:20,
-        borderRadius:50
-    },
-    send:{
-        textAlign:"center"
+    text: {
+        margin: 2,
+        fontSize:20,
+        /* textAlign:"center", */
+        color:"whitesmoke"
+      },
+    button: {
+        margin: 2,
     },
     inputAndroid: {
         textAlign:"center",
@@ -122,7 +145,16 @@ const styles = StyleSheet.create({
         borderColor: 'purple',
         borderRadius: 8,
         color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
       },
-
+    captionText: {
+        fontSize: 12,
+        fontWeight: "400",
+        color: "#8F9BB3",
+    },
+    icon:{
+        width: 35,
+        height: 35,
+        marginRight:10
+    }
 })

@@ -1,51 +1,53 @@
-import React, { useState } from "react"
-import { StyleSheet, ScrollView,View, Text, TextInput,ImageBackground, TouchableOpacity  } from "react-native"
+import React from "react"
+import { connect } from "react-redux"
+import { StyleSheet,ScrollView, ImageBackground,TouchableOpacity,View  } from "react-native"
+import { Layout, Text } from"@ui-kitten/components"
 
-const Search = (props)=>{
-    const [ filtered, setFiltered ] = useState([])
 
-const filter = value =>{
-    value = value.trim().toLowerCase() 
-    if( value === ""){ return setFiltered([]) }
-    else if(  !props.route.params.cities.filter( city => city.city.trim().toLowerCase().indexOf( value ) === 0  ).length ){
-        return setFiltered(false)
-    }else{
-        setFiltered( props.route.params.cities.filter( city => city.city.trim().toLowerCase().indexOf( value ) === 0  )  )
+const Search = ({ navigation, citiesFiltered, value })=>{
+ 
+
+return <Layout style={ styles.layout }  >
+        <ScrollView style={ styles.mainContainer }>
+
+            {  citiesFiltered.length
+                ? citiesFiltered.map( city =>{
+                    return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
+                                <TouchableOpacity onPress={ ()=> navigation.navigate("City",{ city }) }
+                                style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>
+                                <Text style={styles.cardText}>{ city.city }</Text>
+                                </TouchableOpacity>
+                            </ImageBackground>
+                    })
+                : value.length && !citiesFiltered.length
+                    ? <View>
+                        <Text style={ styles.message }>oops!! it seems there are no results</Text>
+                        </View>
+                    : null   
+            }
+        </ScrollView>
+    </Layout>
+}
+
+const mapStatetoProps = state =>{
+    return{
+        citiesFiltered: state.citiesReducer.citiesFiltered,
+        value: state.citiesReducer.value
     }
 }
 
-return <ScrollView>
-    <View style={ styles.navBar }>
-        <Text>volver</Text>
-        <TextInput onChangeText={ filter } style={ styles.inputFilter } />
-    </View>
-        {   filtered.length 
-                ? filtered.map( city =>{
-                return <ImageBackground key={ city._id } source={{ uri: city.img }} style={styles.image}>
-                        <TouchableOpacity onPress={ ()=> this.props.navigation.navigate("City",{ city }) }
-                        style={{ width:"100%", height:"100%", alignItems:"center",justifyContent:"center" }}>
-                        <Text style={styles.cardText}>{ city.city }</Text>
-                        </TouchableOpacity>
-                    </ImageBackground>
-                })
-                : typeof filtered === "object" && !filtered.length
-                    ? <Text>Search Something</Text>
-                    : <Text>there are no results</Text>
-        }
-    </ScrollView>
-
-}
-
-export default Search
+export default connect(mapStatetoProps) (Search)
 
 const styles = StyleSheet.create({
-    inputFilter:{
-        width:"100%",
-        backgroundColor:"black",
-        color:"white"
+    layout:{
+        flex:1
     },
-    navBar:{
-        flexDirection:"row"
+    mainContainer:{
+        marginTop:"6%",
+    },
+    text:{
+        color:"white",
+        marginTop:"20%"
     },
     image:{ 
         width:"100%",
@@ -56,5 +58,10 @@ const styles = StyleSheet.create({
     cardText:{
         fontSize:40,
         color:"white"
+    },
+    message:{
+        textAlign:"center",
+        fontSize:20
     }
 })
+

@@ -18,17 +18,23 @@ const authAction ={
             } )
             .then( data => data.json() )
             .then( data =>{
-                if( data.success){ 
-                    AsyncStorage.setItem("user", JSON.stringify( data.result )  )
-                    AsyncStorage.setItem("token", data.result.token )
+                
+                if( data.success ){
+                    AsyncStorage.setItem("user", JSON.stringify( data.result ))
+                    AsyncStorage.setItem("token",  data.result.token )
                     dispatch({ type:"LOGUSER", payload:data.result }) 
                     return { success:true }
                 }
-                else{
-                    console.log( data )
-                }
+                else{ return { success:false, message:"The email or password is wrong" } }
             })
             .catch( err => console.log( err ) )
+        }
+    },
+    logOut: ()=>{
+        return (dispatch)=>{
+            AsyncStorage.setItem("user","")
+            AsyncStorage.setItem("token","")
+            dispatch({ type:"LOGOUT" })
         }
     }
 

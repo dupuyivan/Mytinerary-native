@@ -4,9 +4,9 @@
     "slug": "myTinerary",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/traveller.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/traveller.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,11 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.webiosandroid.all",
+      "config":{
+        "googleSignIn":{
+          "reservedClientId":"com.googleusercontent.apps.418543337270-rclc43hp5mevhto3c372opc9o2dfdbf7"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/traveller.png",
         "backgroundColor": "#FFFFFF"
       }
     },

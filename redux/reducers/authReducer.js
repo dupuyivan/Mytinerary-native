@@ -10,10 +10,13 @@ const authReducer = ( state = initialState , action )=>{
                 ...state,
                 userLogged: action.payload
             }
-            break;
+        case "LOGOUT":
+            return {
+                     ...state,
+                     userLogged: null
+            }
     
         default: return state
-            break;
     }
 
 }

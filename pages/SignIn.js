@@ -1,45 +1,62 @@
 import React from "react"
 import { connect } from "react-redux"
 import authAction from "../redux/actions/authAction"
-
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native"
+import LoginScreen from "../components/BotonGoogle"
+import { StyleSheet, View,ToastAndroid,TouchableOpacity  } from "react-native"
+import { Layout, Input, Button,Text ,Icon  } from '@ui-kitten/components';
 
 class SignIn extends React.Component {
 
- state={ form:{ email:"", password:"" } }
+ state={ form:{ email:"", password:"" }, visiblePassword:true }
 
  readForm = (field, value)=>{ this.setState({ ...this.state, form:{ ...this.state.form, [field]:value } }) }
 
  submitForm=()=>{
+    if( !this.state.form.email.length && !this.state.form.password.length ){ return null }
     this.props.submitForm("signin",this.state.form )
-    .then( data => data.success && this.props.navigation.navigate("Home") )
+    .then( data =>{
+    data.success 
+    ? this.props.navigation.navigate("Home") 
+    : ToastAndroid.show( data.message , ToastAndroid.SHORT)
+    })
  }
 
 render(){
-    return <View style={ styles.mainContainer }>
-    <Text style={ styles.title }>SignIn</Text>
+    return <Layout style={ styles.mainContainer }>
+                <Text style={ styles.title } >SignIn</Text>
+                        <View>
+                            <Text appearance='hint' category='s1' >Email</Text>
+                            <Input 
+                            autoCapitalize="none"
+                            onChangeText={ value => this.readForm("email",value)} />
+                        </View>
+                        <View style={ styles.containers }>
+                            <Text appearance='hint' category='s1'>Password</Text>
+                            <Input
+                            autoCapitalize="none"
+                            secureTextEntry={ this.state.visiblePassword }
+                            accessoryRight={ ()=> <TouchableOpacity onPress={ ()=> this.setState({...this.state, visiblePassword:!this.state.visiblePassword }) }>
+                            <Icon style={ styles.icon } fill="black" name={ this.state.visiblePassword ? 'eye-off' : 'eye'}/>
+                          </TouchableOpacity> }
+                            onChangeText={ value => this.readForm("password",value)} />
+                        </View>
 
-    <View style={ styles.placeHolders }>
-    <Text style={ styles.placeholder }>Email</Text>
-        <TextInput style={ styles.input } onChangeText={ v => this.readForm("email", v) } />
-    </View>
-    <View style={ styles.placeHolders } >
-    <Text style={ styles.placeholder }>Password</Text>
-        <TextInput style={ styles.input } onChangeText={ v => this.readForm("password", v) } />
-    </View>
-    <View style={ styles.placeHolders }>
-       <TouchableOpacity style={ styles.buttonContainer } >
-           <Text onPress={ this.submitForm } style={ styles.send }>SignIn</Text>
-       </TouchableOpacity>
-    </View>
-</View>
+                    <Button style={styles.button} status="info" appearance='outline' onPress={ this.submitForm }>SignIn</Button>
+                    
+                    <View style={{ flexDirection:"row", alignItems:"center" }}>
+                        <Text>Don't have an account?</Text>
+                        <Button onPress={()=> this.props.navigation.navigate("SignUp") } 
+                        status="success" appearance='ghost'>SignUp</Button>
+                    </View>
+
+                <LoginScreen text={ "SignIn with Google" } endpoint={ "signin" } navigation={ this.props.navigation } />
+        </Layout>
 }
 }
 
 const mapDispatchToProps ={
     submitForm:authAction.submitForm
 }
-
 
 export default connect(null, mapDispatchToProps) (SignIn)
 
@@ -49,36 +66,24 @@ const styles = StyleSheet.create({
         flex:1 
     },
     title:{
-        fontSize:40,
         textAlign:"center",
-        marginTop:10,
+        fontSize:30,
         marginBottom:20
     },
-    placeHolders:{
-        alignItems:"center",
-        marginBottom:20
+    containers:{
+        marginBottom:"4%"
     },
-    placeholder:{
-        fontSize: 20
+    text: {
+        margin: 2,
+        fontSize:20,
     },
-    input:{
-        borderStyle:"solid",
-        borderColor:"black",
-        width:"75%",
-        backgroundColor:"black",
-        borderRadius:10,
-        backgroundColor:"#D7E3EE",
-        paddingLeft:4
+    button: {
+        margin: 2,
     },
-    buttonContainer:{
-        width:"60%",
-        textAlign:"center",
-        backgroundColor:"#379BF3",
-        padding:20,
-        borderRadius:50
-    },
-    send:{
-        textAlign:"center"
+    icon:{
+        width: 35,
+        height: 35,
+        marginRight:10
     }
 
 })
